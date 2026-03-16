@@ -6,11 +6,36 @@ import logoBremen from '@assets/logo-bremen.png';
 import logoBosch from '@assets/logo-bosch.png';
 
 const brands = [
-  { name: '3M', src: logo3m },
-  { name: 'DeWalt', src: logoDewalt },
-  { name: 'Stanley', src: logoStanley },
-  { name: 'Bremen', src: logoBremen },
-  { name: 'Bosch', src: logoBosch },
+  {
+    name: '3M',
+    src: logo3m,
+    logoClass: 'object-contain scale-[0.92]',
+    imageStyle: {},
+  },
+  {
+    name: 'DeWalt',
+    src: logoDewalt,
+    logoClass: 'object-contain scale-[0.95]',
+    imageStyle: {},
+  },
+  {
+    name: 'Stanley',
+    src: logoStanley,
+    logoClass: 'object-contain scale-[0.95]',
+    imageStyle: {},
+  },
+  {
+    name: 'Bremen',
+    src: logoBremen,
+    logoClass: 'object-contain scale-[0.92]',
+    imageStyle: {},
+  },
+  {
+    name: 'Bosch',
+    src: logoBosch,
+    logoClass: 'object-contain scale-[0.92]',
+    imageStyle: {},
+  },
 ];
 
 const whatsappNumber = '5491134446666';
@@ -29,9 +54,11 @@ export function Brands() {
           <p className="text-sm font-bold uppercase tracking-[0.25em] text-primary mb-3">
             MARCAS
           </p>
+
           <h2 className="text-4xl md:text-5xl font-extrabold text-[hsl(var(--text-main))] mb-4">
             Marcas de confianza
           </h2>
+
           <p className="text-lg md:text-xl text-[hsl(var(--text-soft))] max-w-2xl mx-auto">
             Trabajamos con marcas reconocidas para ofrecer calidad, respaldo y mejores opciones para cada cliente.
           </p>
@@ -51,14 +78,16 @@ export function Brands() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.08, duration: 0.4 }}
-                className="group bg-[hsl(var(--surface-1))] border border-[hsl(var(--surface-3))] hover:border-primary rounded-2xl p-6 flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                style={{ minHeight: '120px' }}
+                className="group rounded-2xl p-6 flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] hover:border-primary min-h-[120px]"
               >
-                <img
-                  src={brand.src}
-                  alt={brand.name}
-                  className="w-full h-14 object-contain transition-transform duration-300 group-hover:scale-105"
-                />
+                <div className="w-full h-16 rounded-xl bg-white flex items-center justify-center px-4 overflow-hidden">
+                  <img
+                    src={brand.src}
+                    alt={brand.name}
+                    className={`w-full h-12 ${brand.logoClass}`}
+                    style={brand.imageStyle}
+                  />
+                </div>
               </motion.a>
             );
           })}
