@@ -1,42 +1,45 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 
-const whatsappBase = 'https://wa.me/5491134446666?text=';
+const whatsappNumber = '5491134446666';
 
 const machines = [
   {
     name: 'Amoladoras',
     brand: 'Bosch',
-    image: 'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=900&q=80',
+    image: '/images/maquinas/bosch-1.png',
   },
   {
-    name: 'Taladros y Atornilladores',
+    name: 'Taladros y atornilladores',
     brand: 'DeWalt',
-    image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=900&q=80',
+    image: '/images/maquinas/dewalt-1.png',
   },
   {
-    name: 'Herramientas para taller',
+    name: 'Herramientas eléctricas',
     brand: 'Black & Decker',
-    image: 'https://images.unsplash.com/photo-1581147036324-c1c0a2c8e16f?auto=format&fit=crop&w=900&q=80',
+    image: '/images/maquinas/blackdecker-1.png',
   },
 ];
 
 export function FeaturedMachines() {
   return (
-    <section id="maquinas" className="py-24 bg-[hsl(var(--surface-0))]">
+    <section id="maquinas" className="py-24 bg-[hsl(var(--surface-1))]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-14"
         >
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-primary mb-3">
+            MÁQUINAS
+          </p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-[hsl(var(--text-main))] mb-4">
             Máquinas destacadas
           </h2>
-          <p className="text-xl text-[hsl(var(--text-soft))] max-w-3xl mx-auto">
-            Cada tarjeta lleva directo a WhatsApp para consultar stock, precio o marca disponible.
+          <p className="text-lg md:text-xl text-[hsl(var(--text-soft))] max-w-3xl mx-auto">
+            Una selección de máquinas y herramientas de marcas reconocidas para trabajos exigentes, profesionales y de uso general.
           </p>
         </motion.div>
 
@@ -46,27 +49,38 @@ export function FeaturedMachines() {
 
             return (
               <motion.a
-                key={machine.name}
-                href={`${whatsappBase}${encodeURIComponent(message)}`}
+                key={`${machine.brand}-${machine.name}`}
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="group overflow-hidden rounded-3xl bg-[hsl(var(--surface-1))] border border-[hsl(var(--surface-3))] shadow-xl hover:-translate-y-2 transition-all duration-300"
+                transition={{ delay: index * 0.08, duration: 0.45 }}
+                className="group overflow-hidden rounded-3xl bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] shadow-xl hover:-translate-y-2 transition-all duration-300"
               >
-                <img
-                  src={machine.image}
-                  alt={machine.name}
-                  className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                <div className="h-72 bg-white">
+                  <img
+                    src={machine.image}
+                    alt={`${machine.name} ${machine.brand}`}
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
 
                 <div className="p-6">
-                  <p className="text-sm uppercase tracking-[0.2em] text-primary font-bold mb-2">{machine.brand}</p>
-                  <h3 className="text-2xl font-bold text-[hsl(var(--text-main))] mb-3">{machine.name}</h3>
+                  <p className="text-sm uppercase tracking-[0.22em] text-primary font-bold mb-2">
+                    {machine.brand}
+                  </p>
 
-                  <div className="inline-flex items-center gap-2 text-white bg-[#25d366] px-4 py-2 rounded-full font-semibold">
+                  <h3 className="text-2xl font-bold text-[hsl(var(--text-main))] mb-3">
+                    {machine.name}
+                  </h3>
+
+                  <p className="text-[hsl(var(--text-soft))] mb-5 leading-relaxed">
+                    Consultá disponibilidad, precio y opciones de esta línea directamente por WhatsApp.
+                  </p>
+
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#25d366] text-white px-4 py-2 font-semibold">
                     <MessageCircle className="w-4 h-4" />
                     Consultar por WhatsApp
                   </div>
