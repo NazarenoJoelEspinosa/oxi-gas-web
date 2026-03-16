@@ -6,29 +6,34 @@ import logoBremen from '@assets/logo-bremen.png';
 import logoBosch from '@assets/logo-bosch.png';
 
 const brands = [
-  { name: '3M', src: logo3m, invertOnDark: false },
-  { name: 'DeWalt', src: logoDewalt, invertOnDark: false },
-  { name: 'Black & Decker', src: logoBlackDecker, invertOnDark: false },
-  { name: 'Bremen', src: logoBremen, invertOnDark: true },
-  { name: 'Bosch', src: logoBosch, invertOnDark: false },
+  { name: '3M', src: logo3m },
+  { name: 'DeWalt', src: logoDewalt },
+  { name: 'Black & Decker', src: logoBlackDecker },
+  { name: 'Bremen', src: logoBremen },
+  { name: 'Bosch', src: logoBosch },
 ];
+
+const whatsappNumber = '5491134446666';
 
 export function Brands() {
   return (
     <section id="marcas" className="py-24 bg-[hsl(var(--surface-0))]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-14"
         >
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-primary mb-3">
+            MARCAS
+          </p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-[hsl(var(--text-main))] mb-4">
-            Marcas de Confianza
+            Marcas de confianza
           </h2>
-          <p className="text-xl text-[hsl(var(--text-soft))] max-w-2xl mx-auto">
-            Al hacer click en cada marca, el cliente puede consultar directo por WhatsApp.
+          <p className="text-lg md:text-xl text-[hsl(var(--text-soft))] max-w-2xl mx-auto">
+            Trabajamos con marcas reconocidas para ofrecer calidad, respaldo y mejores opciones para cada cliente.
           </p>
         </motion.div>
 
@@ -39,25 +44,20 @@ export function Brands() {
             return (
               <motion.a
                 key={brand.name}
-                href={`https://wa.me/5491134446666?text=${encodeURIComponent(message)}`}
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.08, duration: 0.4 }}
-                className="bg-[hsl(var(--surface-1))] border border-[hsl(var(--surface-3))] hover:border-primary rounded-2xl p-6 flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 group"
-                style={{ minHeight: '110px' }}
+                className="group bg-[hsl(var(--surface-1))] border border-[hsl(var(--surface-3))] hover:border-primary rounded-2xl p-6 flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                style={{ minHeight: '120px' }}
               >
                 <img
                   src={brand.src}
                   alt={brand.name}
-                  title={`Consultar ${brand.name}`}
-                  className="w-full h-14 object-contain transition-all duration-300 group-hover:scale-105"
-                  style={{
-                    filter: brand.invertOnDark ? 'brightness(0) invert(1)' : 'none',
-                    opacity: 0.92,
-                  }}
+                  className="w-full h-14 object-contain transition-transform duration-300 group-hover:scale-105"
                 />
               </motion.a>
             );
