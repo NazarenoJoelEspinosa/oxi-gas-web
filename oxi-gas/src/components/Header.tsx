@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import oxiGasLogo from '@assets/oxi-gas-logo.png';
 
-export function Header() {
+type HeaderProps = {
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
+};
+
+export function Header({ theme, onToggleTheme }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -19,7 +24,8 @@ export function Header() {
   const navLinks = [
     { name: 'Inicio', href: '#inicio' },
     { name: 'Productos', href: '#productos' },
-    { name: 'Seguridad', href: '#seguridad' },
+    { name: 'Gases', href: '#gases' },
+    { name: 'Máquinas', href: '#maquinas' },
     { name: 'Marcas', href: '#marcas' },
     { name: 'Horarios', href: '#horarios' },
   ];
@@ -27,14 +33,13 @@ export function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300",
-        isScrolled 
-          ? "bg-[#0d1b2a]/95 backdrop-blur-md shadow-lg py-4 border-b border-white/5" 
-          : "bg-[#0d1b2a] py-6"
+        'fixed top-0 w-full z-50 transition-all duration-300 border-b',
+        isScrolled
+          ? 'bg-[hsl(var(--surface-0))]/92 backdrop-blur-md shadow-lg border-[hsl(var(--surface-3))] py-4'
+          : 'bg-[hsl(var(--surface-0))] border-transparent py-6'
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        {/* Logo */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4">
         <a
           href="#inicio"
           aria-label="OXI-GAS - Inicio"
@@ -48,21 +53,31 @@ export function Header() {
           />
         </a>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center space-x-8">
-          <ul className="flex space-x-8">
+        <nav className="hidden lg:flex items-center space-x-6">
+          <ul className="flex space-x-6">
             {navLinks.map((link) => (
               <li key={link.name}>
-                <a 
+                <a
                   href={link.href}
-                  className="text-[#f0f4f8] hover:text-primary font-medium transition-colors duration-200"
+                  className="text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors duration-200"
                 >
                   {link.name}
                 </a>
               </li>
             ))}
           </ul>
-          <a 
+
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            className="inline-flex items-center gap-2 rounded-lg border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] px-4 py-2 text-[hsl(var(--text-main))] hover:border-primary transition-colors"
+            aria-label="Cambiar modo de color"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            <span>{theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}</span>
+          </button>
+
+          <a
             href="#contacto"
             className="bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-6 rounded-lg shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-200 hover:-translate-y-0.5"
           >
@@ -70,24 +85,33 @@ export function Header() {
           </a>
         </nav>
 
-        {/* Mobile Menu Button */}
-        <button 
-          className="lg:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        <div className="lg:hidden flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            className="text-[hsl(var(--text-main))] p-2 hover:bg-[hsl(var(--surface-1))] rounded-lg transition-colors border border-[hsl(var(--surface-3))]"
+            aria-label="Cambiar modo de color"
+          >
+            {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
+          </button>
+
+          <button
+            className="text-[hsl(var(--text-main))] p-2 hover:bg-[hsl(var(--surface-1))] rounded-lg transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Navigation Dropdown */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[#162033] border-t border-white/5 overflow-hidden shadow-xl"
+            className="lg:hidden bg-[hsl(var(--surface-1))] border-t border-[hsl(var(--surface-3))] overflow-hidden shadow-xl"
           >
             <div className="px-4 py-6 flex flex-col space-y-4">
               {navLinks.map((link) => (
@@ -95,7 +119,7 @@ export function Header() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-white text-lg font-medium py-3 px-4 rounded-lg hover:bg-white/5 hover:text-primary transition-colors"
+                  className="text-[hsl(var(--text-main))] text-lg font-medium py-3 px-4 rounded-lg hover:bg-[hsl(var(--surface-2))] hover:text-primary transition-colors"
                 >
                   {link.name}
                 </a>
