@@ -12,6 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,13 +21,16 @@ jobs:
           node-version: 20
 
       - run: npm install
+        working-directory: oxi-gas
+
       - run: npm run build
+        working-directory: oxi-gas
         env:
-          BASE_PATH: /
+          BASE_PATH: /oxi-gas-web/
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./oxi-gas/dist
 
   deploy:
     needs: build
