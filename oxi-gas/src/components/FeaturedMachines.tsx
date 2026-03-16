@@ -7,17 +7,17 @@ const machines = [
   {
     name: 'Amoladoras',
     brand: 'Bosch',
-    image: '/images/maquinas/bosch-1.png',
+    image: `${import.meta.env.BASE_URL}images/maquinas/bosch-1.png`,
   },
   {
     name: 'Taladros y atornilladores',
     brand: 'DeWalt',
-    image: '/images/maquinas/dewalt-1.png',
+    image: `${import.meta.env.BASE_URL}images/maquinas/dewalt-1.png`,
   },
   {
     name: 'Herramientas eléctricas',
     brand: 'Stanley',
-    image: '/images/maquinas/stanley-1.png',
+    image: `${import.meta.env.BASE_URL}images/maquinas/stanley-1.png`,
   },
 ];
 
