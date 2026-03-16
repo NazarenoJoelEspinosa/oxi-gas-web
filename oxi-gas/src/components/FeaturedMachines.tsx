@@ -14,11 +14,11 @@ const machines = [
     brand: 'DeWalt',
     image: '/images/maquinas/dewalt-1.png',
   },
-{
-  name: 'Herramientas eléctricas',
-  brand: 'Stanley',
-  image: '/images/maquinas/stanley-1.png',
-},
+  {
+    name: 'Herramientas eléctricas',
+    brand: 'Stanley',
+    image: '/images/maquinas/stanley-1.png',
+  },
 ];
 
 export function FeaturedMachines() {
@@ -35,9 +35,11 @@ export function FeaturedMachines() {
           <p className="text-sm font-bold uppercase tracking-[0.25em] text-primary mb-3">
             MÁQUINAS
           </p>
+
           <h2 className="text-4xl md:text-5xl font-extrabold text-[hsl(var(--text-main))] mb-4">
             Máquinas destacadas
           </h2>
+
           <p className="text-lg md:text-xl text-[hsl(var(--text-soft))] max-w-3xl mx-auto">
             Una selección de máquinas y herramientas de marcas reconocidas para trabajos exigentes, profesionales y de uso general.
           </p>
@@ -59,11 +61,14 @@ export function FeaturedMachines() {
                 transition={{ delay: index * 0.08, duration: 0.45 }}
                 className="group overflow-hidden rounded-3xl bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] shadow-xl hover:-translate-y-2 transition-all duration-300"
               >
-                <div className="h-72 bg-white">
+                <div className="h-72 bg-white flex items-center justify-center overflow-hidden">
                   <img
                     src={machine.image}
                     alt={`${machine.name} ${machine.brand}`}
-                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = '/images/maquinas/placeholder.png';
+                    }}
                   />
                 </div>
 
