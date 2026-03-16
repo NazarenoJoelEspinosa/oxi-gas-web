@@ -1,14 +1,14 @@
 import { motion } from 'framer-motion';
 import logo3m from '@assets/logo-3m.png';
 import logoDewalt from '@assets/logo-dewalt.png';
-import logoBlackDecker from '@assets/logo-blackdecker.png';
+import logoStanley from '@assets/logo-stanley.png';
 import logoBremen from '@assets/logo-bremen.png';
 import logoBosch from '@assets/logo-bosch.png';
 
 const brands = [
   { name: '3M', src: logo3m },
   { name: 'DeWalt', src: logoDewalt },
-  { name: 'Black & Decker', src: logoBlackDecker },
+  { name: 'Stanley', src: logoStanley },
   { name: 'Bremen', src: logoBremen },
   { name: 'Bosch', src: logoBosch },
 ];
