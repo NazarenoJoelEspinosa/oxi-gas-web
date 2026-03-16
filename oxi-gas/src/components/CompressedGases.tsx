@@ -5,7 +5,7 @@ const gases = [
     title: 'Gas envasado',
     description:
       'Contamos con opciones de gas envasado para distintas necesidades, con atención personalizada y asesoramiento para tu compra.',
-    image: '/images/gases/ypf-gas.png',
+    image: `${import.meta.env.BASE_URL}images/gases/ypf-gas.png`
   },
   {
     title: 'Gases comprimidos',
