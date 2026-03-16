@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import logo3m from '@assets/logo-3m.png';
 import logoDewalt from '@assets/logo-dewalt.png';
-import logoStanley from '@assets/logo-stanley.png';
 import logoBremen from '@assets/logo-bremen.png';
 import logoBosch from '@assets/logo-bosch.png';
 
@@ -18,12 +17,12 @@ const brands = [
     logoClass: 'object-contain scale-[0.95]',
     imageStyle: {},
   },
-  {
-    name: 'Stanley',
-    src: logoStanley,
-    logoClass: 'object-contain scale-[0.95]',
-    imageStyle: {},
-  },
+{
+  name: 'Stanley',
+  src: '/images/logos/stanley.png',
+  logoClass: 'object-contain scale-[0.95]',
+  imageStyle: {},
+},
   {
     name: 'Bremen',
     src: logoBremen,
