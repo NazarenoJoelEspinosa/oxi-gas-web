@@ -19,7 +19,7 @@ const brands = [
   },
 {
   name: 'Stanley',
-  src: '/images/logos/stanley.png',
+  src: `${import.meta.env.BASE_URL}images/logos/stanley.png`,
   logoClass: 'object-contain scale-[0.95]',
   imageStyle: {},
 },
