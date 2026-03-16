@@ -14,11 +14,11 @@ const machines = [
     brand: 'DeWalt',
     image: '/images/maquinas/dewalt-1.png',
   },
-  {
-    name: 'Herramientas eléctricas',
-    brand: 'Black & Decker',
-    image: '/images/maquinas/blackdecker-1.png',
-  },
+{
+  name: 'Herramientas eléctricas',
+  brand: 'Stanley',
+  image: '/images/maquinas/stanley-1.png',
+},
 ];
 
 export function FeaturedMachines() {
