@@ -10,9 +10,12 @@ const whatsappNumber = '5491134446666';
 const brands = [
   { name: '3M', src: logo3m },
   { name: 'DeWalt', src: logoDewalt },
+  { name: 'Stanley', src: `${base}images/logos/stanley.png` },
+  { name: 'Black & Decker', src: `${base}images/logos/blackdecker.png` },
   { name: 'Bosch', src: logoBosch },
   { name: 'Bremen', src: logoBremen },
-  { name: 'Stanley', src: `${base}images/logos/stanley.png` },
+  { name: 'Intraud', src: `${base}images/logos/intraud.png` },
+
 
   { name: 'Acindar', src: `${base}images/logos/acindar.png` },
   { name: 'Aleba', src: `${base}images/logos/aleba.png` },
@@ -49,8 +52,7 @@ const brands = [
   { name: 'Tyrolit', src: `${base}images/logos/tyrolit.png` },
   { name: 'Uranga', src: `${base}images/logos/uranga.png` },
   { name: 'WD-40', src: `${base}images/logos/wd40.png` },
-  { name: 'Intraud', src: `${base}images/logos/intraud.png` },
-  { name: 'Black & Decker', src: `${base}images/logos/blackdecker.png` },
+  
 ];
 
 export function Brands() {
