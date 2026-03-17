@@ -51,7 +51,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
           <img
             src={oxiGasLogo}
             alt="OXI-GAS Ferretería Industrial"
-            className="h-24 w-auto object-contain"
+            className="h-20 w-auto object-contain scale-150"
           />
         </a>
 
