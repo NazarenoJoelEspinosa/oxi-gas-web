@@ -56,17 +56,15 @@ const brands = [
 
 export function Brands() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isAdjustingRef = useRef(false);
   const [cardStep, setCardStep] = useState(196);
 
   const extendedBrands = [...brands, ...brands, ...brands];
 
   useEffect(() => {
     const updateStep = () => {
-      if (window.innerWidth < 768) {
-        setCardStep(166);
-      } else {
-        setCardStep(196);
-      }
+      setCardStep(window.innerWidth < 768 ? 166 : 196);
     };
 
     updateStep();
@@ -78,21 +76,51 @@ export function Brands() {
     const container = scrollRef.current;
     if (!container) return;
 
-    const singleSetWidth = (container.scrollWidth / 3);
-    container.scrollLeft = singleSetWidth;
+    const setInitialPosition = () => {
+      const singleSetWidth = container.scrollWidth / 3;
+      container.scrollLeft = singleSetWidth;
+    };
+
+    const id = requestAnimationFrame(setInitialPosition);
+    return () => cancelAnimationFrame(id);
   }, []);
 
-  const handleInfiniteScroll = () => {
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+  }, []);
+
+  const normalizeInfinitePosition = () => {
     const container = scrollRef.current;
     if (!container) return;
 
     const singleSetWidth = container.scrollWidth / 3;
+    const left = container.scrollLeft;
 
-    if (container.scrollLeft <= singleSetWidth * 0.15) {
-      container.scrollLeft += singleSetWidth;
-    } else if (container.scrollLeft >= singleSetWidth * 1.85) {
-      container.scrollLeft -= singleSetWidth;
+    if (left < singleSetWidth * 0.5) {
+      isAdjustingRef.current = true;
+      container.scrollLeft = left + singleSetWidth;
+      requestAnimationFrame(() => {
+        isAdjustingRef.current = false;
+      });
+    } else if (left > singleSetWidth * 1.5) {
+      isAdjustingRef.current = true;
+      container.scrollLeft = left - singleSetWidth;
+      requestAnimationFrame(() => {
+        isAdjustingRef.current = false;
+      });
     }
+  };
+
+  const handleScroll = () => {
+    if (isAdjustingRef.current) return;
+
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      normalizeInfinitePosition();
+    }, 120);
   };
 
   const scroll = (direction: 'left' | 'right') => {
@@ -100,7 +128,7 @@ export function Brands() {
     if (!container) return;
 
     container.scrollBy({
-      left: direction === 'left' ? -cardStep * 2 : cardStep * 2,
+      left: direction === 'left' ? -(cardStep * 2) : cardStep * 2,
       behavior: 'smooth',
     });
   };
@@ -144,8 +172,8 @@ export function Brands() {
 
             <div
               ref={scrollRef}
-              onScroll={handleInfiniteScroll}
-              className="flex gap-4 md:gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1"
+              onScroll={handleScroll}
+              className="flex gap-4 md:gap-6 overflow-x-auto no-scrollbar px-1"
             >
               {extendedBrands.map((brand, index) => {
                 const message = `Hola OXI-GAS, quiero consultar por productos de la marca ${brand.name}.`;
