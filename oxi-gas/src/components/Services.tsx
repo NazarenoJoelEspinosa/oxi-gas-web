@@ -5,8 +5,8 @@ const categories = [
   {
     icon: <Flame className="w-10 h-10 text-primary" />,
     title: "Gases Comprimidos",
-    description: "Oxígeno, Acetileno, Argón, CO₂ y mezclas especiales para soldadura industrial.",
-    items: ["Cilindros de Oxígeno", "Cilindros de Acetileno", "Argón puro y mezclas", "CO₂ industrial"]
+    description: "Venta y Alquiler de gases para la industria",
+    items: ["Oxigeno", "Acetileno", "Argón", "CO₂ (Gas Carbonico)","Nitrogeno","Mix 20 (Atal)","Mix 310 (Noxal)"]
   },
   {
     icon: <Wrench className="w-10 h-10 text-primary" />,
