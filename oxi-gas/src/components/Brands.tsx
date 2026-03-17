@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import logo3m from '@assets/logo-3m.png';
 import logoDewalt from '@assets/logo-dewalt.png';
 import logoBremen from '@assets/logo-bremen.png';
@@ -55,14 +56,51 @@ const brands = [
 
 export function Brands() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [cardStep, setCardStep] = useState(196);
+
+  const extendedBrands = [...brands, ...brands, ...brands];
+
+  useEffect(() => {
+    const updateStep = () => {
+      if (window.innerWidth < 768) {
+        setCardStep(166);
+      } else {
+        setCardStep(196);
+      }
+    };
+
+    updateStep();
+    window.addEventListener('resize', updateStep);
+    return () => window.removeEventListener('resize', updateStep);
+  }, []);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const singleSetWidth = (container.scrollWidth / 3);
+    container.scrollLeft = singleSetWidth;
+  }, []);
+
+  const handleInfiniteScroll = () => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const singleSetWidth = container.scrollWidth / 3;
+
+    if (container.scrollLeft <= singleSetWidth * 0.15) {
+      container.scrollLeft += singleSetWidth;
+    } else if (container.scrollLeft >= singleSetWidth * 1.85) {
+      container.scrollLeft -= singleSetWidth;
+    }
+  };
 
   const scroll = (direction: 'left' | 'right') => {
-    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+    if (!container) return;
 
-    const scrollAmount = 320;
-
-    scrollRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
+    container.scrollBy({
+      left: direction === 'left' ? -cardStep * 2 : cardStep * 2,
       behavior: 'smooth',
     });
   };
@@ -90,51 +128,57 @@ export function Brands() {
           </p>
         </motion.div>
 
-        <div className="relative">
+        <div className="flex items-center gap-3 md:gap-4">
           <button
             type="button"
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-11 h-11 rounded-full bg-white/90 text-black shadow-lg hover:scale-105 transition border"
-            aria-label="Desplazar marcas hacia la izquierda"
+            className="shrink-0 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] text-[hsl(var(--text-main))] hover:border-primary hover:text-primary transition-all duration-300"
+            aria-label="Ver marcas anteriores"
           >
-            ‹
+            <ChevronLeft size={20} />
           </button>
+
+          <div className="relative flex-1 overflow-hidden">
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-8 md:w-16 bg-gradient-to-r from-[hsl(var(--surface-0))] to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 md:w-16 bg-gradient-to-l from-[hsl(var(--surface-0))] to-transparent z-10" />
+
+            <div
+              ref={scrollRef}
+              onScroll={handleInfiniteScroll}
+              className="flex gap-4 md:gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1"
+            >
+              {extendedBrands.map((brand, index) => {
+                const message = `Hola OXI-GAS, quiero consultar por productos de la marca ${brand.name}.`;
+
+                return (
+                  <a
+                    key={`${brand.name}-${index}`}
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex-shrink-0 w-[150px] h-[92px] md:w-[180px] md:h-[105px] rounded-2xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] hover:border-primary hover:-translate-y-1 transition-all duration-300 px-4"
+                  >
+                    <div className="w-full h-full rounded-xl bg-white flex items-center justify-center overflow-hidden px-3">
+                      <img
+                        src={brand.src}
+                        alt={brand.name}
+                        className="max-w-full max-h-[42px] md:max-h-[46px] object-contain transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
 
           <button
             type="button"
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex items-center justify-center w-11 h-11 rounded-full bg-white/90 text-black shadow-lg hover:scale-105 transition border"
-            aria-label="Desplazar marcas hacia la derecha"
+            className="shrink-0 flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] text-[hsl(var(--text-main))] hover:border-primary hover:text-primary transition-all duration-300"
+            aria-label="Ver más marcas"
           >
-            ›
+            <ChevronRight size={20} />
           </button>
-
-          <div
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-0 md:px-14 pb-2"
-          >
-            {brands.map((brand, index) => {
-              const message = `Hola OXI-GAS, quiero consultar por productos de la marca ${brand.name}.`;
-
-              return (
-                <a
-                  key={`${brand.name}-${index}`}
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex-shrink-0 w-[150px] h-[95px] md:w-[180px] md:h-[105px] rounded-2xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] hover:border-primary hover:-translate-y-1 transition-all duration-300 px-4"
-                >
-                  <div className="w-full h-full rounded-xl bg-white flex items-center justify-center overflow-hidden px-3">
-                    <img
-                      src={brand.src}
-                      alt={brand.name}
-                      className="max-w-full max-h-[46px] object-contain transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                </a>
-              );
-            })}
-          </div>
         </div>
       </div>
     </section>
