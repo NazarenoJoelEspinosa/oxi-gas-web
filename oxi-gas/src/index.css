@@ -104,3 +104,19 @@ html.light {
     font-family: var(--font-display);
   }
 }
+@keyframes brandsScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.brands-track {
+  animation: brandsScroll 38s linear infinite;
+}
+
+.brands-track:hover {
+  animation-play-state: paused;
+}
