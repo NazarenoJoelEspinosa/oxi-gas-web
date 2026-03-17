@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import oxiGasLogo from '@assets/oxi-gas-logo.png';
+import oxiGasLogo from '@assets/logo-v2.png';
 
 type HeaderProps = {
   theme: 'dark' | 'light';
@@ -51,7 +51,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
           <img
             src={oxiGasLogo}
             alt="OXI-GAS Ferretería Industrial"
-            className="h-12 w-auto object-contain"
+            className="h-14 w-auto object-contain"
           />
         </a>
 
