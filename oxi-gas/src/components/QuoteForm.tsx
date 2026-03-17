@@ -11,6 +11,10 @@ export function QuoteForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (telefono.length < 10 || telefono.length > 11) {
+  alert('Ingresá un número de teléfono válido (10 u 11 dígitos)');
+  return;
+}
 
     const lines = [
       'Hola OXI-GAS, me comunico desde la web.',
@@ -92,14 +96,20 @@ export function QuoteForm() {
                     Teléfono <span className="text-primary">*</span>
                   </label>
                   <input
-                    type="tel"
-                    id="telefono"
-                    required
-                    value={telefono}
-                    onChange={e => setTelefono(e.target.value)}
-                    className="w-full bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                    placeholder="11 1234-5678"
-                  />
+  type="tel"
+  id="telefono"
+  required
+  value={telefono}
+  onChange={(e) => {
+    const valor = e.target.value.replace(/\D/g, '');
+    setTelefono(valor);
+  }}
+  pattern="[0-9]{10,11}"
+  maxLength={11}
+  minLength={10}
+  className="w-full bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary"
+  placeholder="Ej: 1123456789"
+/>
                 </div>
 
                 <div className="space-y-2">
