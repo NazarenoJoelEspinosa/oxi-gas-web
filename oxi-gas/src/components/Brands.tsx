@@ -128,16 +128,7 @@ export function Brands() {
                     href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="
-                      group snap-center flex-shrink-0
-                      w-[220px] h-[92px]
-                      sm:w-[240px] sm:h-[96px]
-                      md:w-[180px] md:h-[105px]
-                      rounded-2xl border border-[hsl(var(--surface-3))]
-                      bg-[hsl(var(--surface-1))]
-                      hover:border-primary hover:-translate-y-1
-                      transition-all duration-300 px-4
-                    "
+                    className="group snap-center flex-shrink-0 w-[220px] h-[92px] sm:w-[240px] sm:h-[96px] md:w-[180px] md:h-[105px] rounded-2xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] hover:border-primary hover:-translate-y-1 transition-all duration-300 px-4"
                   >
                     <div className="w-full h-full rounded-xl bg-white flex items-center justify-center overflow-hidden px-3">
                       <img
@@ -161,10 +152,6 @@ export function Brands() {
             <ChevronRight size={18} />
           </button>
         </div>
-      </div>
-    </section>
-  );
-}
       </div>
     </section>
   );
