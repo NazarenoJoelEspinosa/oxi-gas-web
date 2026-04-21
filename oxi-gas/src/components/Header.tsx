@@ -48,13 +48,13 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4">
-        <a href="#inicio" aria-label="OXI-GAS - Inicio" className="shrink-0">
+        <Link href="/" aria-label="OXI-GAS - Inicio" className="shrink-0">
           <img
             src={oxiGasLogo}
             alt="OXI-GAS Ferretería Industrial"
-            className="h-10 w-auto max-w-[160px] object-contain"
+            className="h-14 sm:h-16 w-auto max-w-[220px] object-contain transition-transform hover:scale-[1.02]"
           />
-        </a>
+        </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
           {mainLinks.map((link) => (

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MessageCircle, PackageSearch } from 'lucide-react';
+import { ArrowLeft, Building2, MessageCircle, PackageSearch, SlidersHorizontal, Tag, X } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
@@ -87,14 +87,36 @@ export default function Productos() {
       </section>
 
       <section className="pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] p-4 sm:p-6 shadow-sm">
-          <div className="flex flex-col md:flex-row md:items-end gap-4">
-            <FilterField label="Categoría" htmlFor="filter-category">
+        <div className="rounded-2xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] p-5 sm:p-6 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5 pb-5 border-b border-[hsl(var(--surface-3))]">
+            <div className="flex items-center gap-2 text-[hsl(var(--text-main))]">
+              <SlidersHorizontal className="h-4 w-4 text-primary" />
+              <h2 className="text-sm font-semibold uppercase tracking-[0.2em]">Filtrar por</h2>
+            </div>
+            <div className="flex items-center gap-3">
+              <Badge className="bg-primary/15 text-primary border-primary/30 px-3 py-1 text-sm font-bold">
+                {filtered.length} {filtered.length === 1 ? 'producto' : 'productos'}
+              </Badge>
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-muted))] hover:text-primary transition-colors"
+                >
+                  <X className="h-3.5 w-3.5" />
+                  Limpiar
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FilterField label="Categoría" htmlFor="filter-category" icon={<Tag className="h-3.5 w-3.5" />}>
               <Select
                 value={category}
                 onValueChange={(value) => setCategory(value as CategoryFilter)}
               >
-                <SelectTrigger id="filter-category" className="w-full">
+                <SelectTrigger id="filter-category" className="w-full h-11">
                   <SelectValue placeholder="Todas las categorías" />
                 </SelectTrigger>
                 <SelectContent>
@@ -108,9 +130,9 @@ export default function Productos() {
               </Select>
             </FilterField>
 
-            <FilterField label="Marca" htmlFor="filter-brand">
+            <FilterField label="Marca" htmlFor="filter-brand" icon={<Building2 className="h-3.5 w-3.5" />}>
               <Select value={brand} onValueChange={(value) => setBrand(value as BrandFilter)}>
-                <SelectTrigger id="filter-brand" className="w-full">
+                <SelectTrigger id="filter-brand" className="w-full h-11">
                   <SelectValue placeholder="Todas las marcas" />
                 </SelectTrigger>
                 <SelectContent>
@@ -123,22 +145,24 @@ export default function Productos() {
                 </SelectContent>
               </Select>
             </FilterField>
+          </div>
 
-            <div className="flex items-center justify-between md:justify-end gap-4 md:ml-auto">
-              <span className="text-sm text-[hsl(var(--text-muted))]">
-                {filtered.length} {filtered.length === 1 ? 'producto' : 'productos'}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-2 mt-5 pt-5 border-t border-[hsl(var(--surface-3))]">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-muted))]">
+                Activos:
               </span>
-              {hasActiveFilters && (
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                  className="text-sm font-semibold text-primary hover:underline"
-                >
-                  Limpiar filtros
-                </button>
+              {category !== ALL && (
+                <FilterChip
+                  label={categoryLabel(category)}
+                  onRemove={() => setCategory(ALL)}
+                />
+              )}
+              {brand !== ALL && (
+                <FilterChip label={brand} onRemove={() => setBrand(ALL)} />
               )}
             </div>
-          </div>
+          )}
         </div>
 
         <div className="mt-10">
@@ -163,20 +187,41 @@ export default function Productos() {
 type FilterFieldProps = {
   label: string;
   htmlFor: string;
+  icon?: React.ReactNode;
   children: React.ReactNode;
 };
 
-function FilterField({ label, htmlFor, children }: FilterFieldProps) {
+function FilterField({ label, htmlFor, icon, children }: FilterFieldProps) {
   return (
-    <div className="flex flex-col gap-2 w-full md:max-w-xs">
+    <div className="flex flex-col gap-2 w-full">
       <label
         htmlFor={htmlFor}
-        className="text-xs font-semibold uppercase tracking-[0.2em] text-[hsl(var(--text-muted))]"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[hsl(var(--text-muted))]"
       >
+        {icon}
         {label}
       </label>
       {children}
     </div>
+  );
+}
+
+type FilterChipProps = {
+  label: string;
+  onRemove: () => void;
+};
+
+function FilterChip({ label, onRemove }: FilterChipProps) {
+  return (
+    <button
+      type="button"
+      onClick={onRemove}
+      aria-label={`Quitar filtro ${label}`}
+      className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold px-3 py-1.5 border border-primary/30 transition-colors"
+    >
+      {label}
+      <X className="h-3 w-3" />
+    </button>
   );
 }
 
