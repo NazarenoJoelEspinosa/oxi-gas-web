@@ -12,12 +12,12 @@ const HIGHLIGHTS = [
   {
     icon: Layers,
     title: `${PRODUCT_CATEGORIES.length} categorías`,
-    description: 'Gases, máquinas, seguridad y más',
+    description: 'Soldadura, neumática, herramientas y más',
   },
   {
     icon: ShieldCheck,
-    title: `${PRODUCT_BRANDS.length} marcas líderes`,
-    description: 'Lincoln, Indura, 3M, Bosch y más',
+    title: `${PRODUCT_BRANDS.length} marcas`,
+    description: 'Wembley, Extrapol, AMX, Aligas y más',
   },
 ] as const;
 

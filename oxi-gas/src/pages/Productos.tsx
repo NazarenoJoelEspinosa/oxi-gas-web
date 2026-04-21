@@ -257,11 +257,12 @@ function ProductCard({ product, index }: ProductCardProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <p className="text-sm text-[hsl(var(--text-muted))] leading-relaxed">
-            {product.description}
-          </p>
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-[hsl(var(--text-muted))]">
+            <span className="uppercase tracking-wider font-semibold">Código:</span>
+            <span className="text-[hsl(var(--text-main))]">{product.code}</span>
+          </div>
           <a
-            href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hola, quiero cotizar: ${product.name}`)}`}
+            href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hola, quiero cotizar el producto ${product.code} - ${product.name}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#25d366] hover:bg-[#25d366]/90 text-white font-semibold text-sm py-2.5 px-4 transition-colors"
