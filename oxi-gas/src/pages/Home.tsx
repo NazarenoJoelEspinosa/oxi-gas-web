@@ -11,6 +11,7 @@ import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { CompressedGases } from '@/components/CompressedGases';
 import { FeaturedMachines } from '@/components/FeaturedMachines';
+import { CatalogPreview } from '@/components/CatalogPreview';
 import { useTheme } from '@/hooks/useTheme';
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <Header theme={theme} onToggleTheme={toggleTheme} />
       <Hero />
       <StatsBar />
+      <CatalogPreview />
       <Services />
       <CompressedGases />
       <FeaturedMachines />
