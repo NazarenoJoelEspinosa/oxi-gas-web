@@ -1,35 +1,6 @@
-import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, MessageCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { MessageCircle } from 'lucide-react';
 import { WHATSAPP_URL } from '@/config/constants';
-
-type ScrollIndicatorProps = {
-  targetId: string;
-  label?: string;
-};
-
-function ScrollIndicator({ targetId, label = 'Ver más contenido' }: ScrollIndicatorProps) {
-  const prefersReducedMotion = useReducedMotion();
-
-  return (
-    <motion.a
-      href={`#${targetId}`}
-      aria-label={label}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.2, duration: 0.6 }}
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-2 text-white/70 hover:text-white transition-colors"
-    >
-      <span className="text-xs font-semibold uppercase tracking-[0.2em]">Scroll</span>
-      <motion.span
-        animate={prefersReducedMotion ? undefined : { y: [0, 8, 0] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40"
-      >
-        <ChevronDown className="h-5 w-5" aria-hidden="true" />
-      </motion.span>
-    </motion.a>
-  );
-}
 
 export function Hero() {
   return (
@@ -92,8 +63,7 @@ export function Hero() {
           </div>
         </motion.div>
       </div>
-
-      <ScrollIndicator targetId="productos" label="Ir a la sección de productos" />
+      
     </section>
   );
 }
