@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Building2, MessageCircle, PackageSearch, SlidersHorizontal, Tag, X } from 'lucide-react';
+import { ArrowLeft, Building2, MessageCircle, PackageSearch, Search, SlidersHorizontal, Tag, X } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
@@ -30,15 +30,27 @@ const ALL = 'all' as const;
 type BrandFilter = ProductBrand | typeof ALL;
 type CategoryFilter = ProductCategory | typeof ALL;
 
+function normalize(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
 function filterProducts(
   products: readonly Product[],
   brand: BrandFilter,
   category: CategoryFilter,
+  query: string,
 ): Product[] {
+  const terms = normalize(query.trim()).split(/\s+/).filter(Boolean);
   return products.filter((product) => {
     const matchesBrand = brand === ALL || product.brand === brand;
     const matchesCategory = category === ALL || product.category === category;
-    return matchesBrand && matchesCategory;
+    if (!matchesBrand || !matchesCategory) return false;
+    if (terms.length === 0) return true;
+    const haystack = normalize(`${product.name} ${product.code} ${product.brand}`);
+    return terms.every((term) => haystack.includes(term));
   });
 }
 
@@ -50,13 +62,18 @@ export default function Productos() {
   const { theme, toggleTheme } = useTheme();
   const [brand, setBrand] = useState<BrandFilter>(ALL);
   const [category, setCategory] = useState<CategoryFilter>(ALL);
+  const [query, setQuery] = useState<string>('');
 
-  const filtered = useMemo(() => filterProducts(PRODUCTS, brand, category), [brand, category]);
-  const hasActiveFilters = brand !== ALL || category !== ALL;
+  const filtered = useMemo(
+    () => filterProducts(PRODUCTS, brand, category, query),
+    [brand, category, query],
+  );
+  const hasActiveFilters = brand !== ALL || category !== ALL || query.trim() !== '';
 
   const resetFilters = () => {
     setBrand(ALL);
     setCategory(ALL);
+    setQuery('');
   };
 
   return (
@@ -110,6 +127,32 @@ export default function Productos() {
             </div>
           </div>
 
+          <div className="mb-4">
+            <FilterField label="Buscar" htmlFor="filter-search" icon={<Search className="h-3.5 w-3.5" />}>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(var(--text-muted))]" />
+                <input
+                  id="filter-search"
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Buscá por nombre, código o marca (ej: teflon, WE6481, aligas)"
+                  className="w-full h-11 pl-10 pr-10 rounded-md border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-2))] text-sm text-[hsl(var(--text-main))] placeholder:text-[hsl(var(--text-muted))] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-colors"
+                />
+                {query !== '' && (
+                  <button
+                    type="button"
+                    onClick={() => setQuery('')}
+                    aria-label="Limpiar búsqueda"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-6 w-6 rounded-full text-[hsl(var(--text-muted))] hover:text-[hsl(var(--text-main))] hover:bg-[hsl(var(--surface-3))] transition-colors"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            </FilterField>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FilterField label="Categoría" htmlFor="filter-category" icon={<Tag className="h-3.5 w-3.5" />}>
               <Select
@@ -152,6 +195,9 @@ export default function Productos() {
               <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-muted))]">
                 Activos:
               </span>
+              {query.trim() !== '' && (
+                <FilterChip label={`"${query.trim()}"`} onRemove={() => setQuery('')} />
+              )}
               {category !== ALL && (
                 <FilterChip
                   label={categoryLabel(category)}
