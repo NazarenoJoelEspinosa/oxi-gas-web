@@ -1,22 +1,14 @@
-// Routing
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { useEffect, useState } from "react";
 
-// State management (server state)
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Route, Router as WouterRouter, Switch } from "wouter";
 
-// UI Providers
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
-// Pages
 import Home from "@/pages/Home";
+import Catalog from "@/pages/Catalog";
 import NotFound from "@/pages/not-found";
 
-/**
- * Configuración global de React Query
- * - Evita refetch innecesario al enfocar ventana
- * - Desactiva reintentos automáticos
- */
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -26,35 +18,42 @@ const queryClient = new QueryClient({
   },
 });
 
-/**
- * Definición central de rutas
- */
-function AppRouter() {
+function Router() {
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window === "undefined") return "dark";
+    return (localStorage.getItem("oxi-gas-theme") as "dark" | "light") || "dark";
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "light") {
+      root.classList.add("light");
+    } else {
+      root.classList.remove("light");
+    }
+    localStorage.setItem("oxi-gas-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((current) => (current === "dark" ? "light" : "dark"));
+  };
+
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/">{() => <Home theme={theme} onToggleTheme={toggleTheme} />}</Route>
+      <Route path="/catalogo">{() => <Catalog theme={theme} onToggleTheme={toggleTheme} />}</Route>
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-/**
- * Componente raíz de la aplicación
- * - Maneja providers globales
- * - Configura routing base
- */
 function App() {
-  // Normaliza el BASE_URL eliminando trailing slash
-  const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={basePath}>
-          <AppRouter />
+        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+          <Router />
         </WouterRouter>
-
-        {/* Sistema global de notificaciones */}
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
