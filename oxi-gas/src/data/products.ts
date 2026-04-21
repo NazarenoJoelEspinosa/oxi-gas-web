@@ -62,4 +62,28 @@ export const PRODUCT_CATEGORIES = [
     //
     // Ejemplo:
     // { id: "prod001", code: "PROD001", name: "Amoladora 115mm Bosch", brand: "AMX", category: "neumatica" },
+    {
+      id: "sold001",
+      code: "SOL-ER70S-6-10KG",
+      name: "Alambre MIG ER70S-6 Ø0.8mm 10kg",
+      brand: "Essamet",
+      category: "soldadura",
+      highlight: "Consumo general en acero al carbono",
+    },
+    {
+      id: "sold002",
+      code: "SOL-E6013-25KG",
+      name: "Electrodo E6013 3.2mm 25kg",
+      brand: "Aligas",
+      category: "soldadura",
+      highlight: "Encendido fácil y buena terminación",
+    },
+    {
+      id: "sold003",
+      code: "SOL-REG-ARGCO2",
+      name: "Regulador para Argón/CO₂ con caudalímetro",
+      brand: "Wembley",
+      category: "soldadura",
+      highlight: "Para procesos MIG/MAG",
+    },
   ];

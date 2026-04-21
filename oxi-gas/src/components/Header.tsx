@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'wouter';
 import { cn } from '@/lib/utils';
 import oxiGasLogo from '@assets/logo-v2.png';
 
@@ -13,6 +14,20 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [location, setLocation] = useLocation();
+  const isHome = location === '/';
+  const baseUrl = import.meta.env.BASE_URL;
+
+  const navigateHome = (hash?: string) => {
+    if (hash) {
+      try {
+        sessionStorage.setItem('oxi-gas:pending-hash', hash);
+      } catch {
+        // ignore
+      }
+    }
+    setLocation('/');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +46,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
   ];
 
   const productLinks = [
+    { name: 'Ver catálogo completo', href: '/catalogo' },
     { name: 'Gases comprimidos', href: '#gases' },
     { name: 'Máquinas', href: '#maquinas' },
     { name: 'Seguridad', href: '#seguridad' },
@@ -47,7 +63,19 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4">
-        <a href="#inicio" aria-label="OXI-GAS - Inicio" className="shrink-0">
+        <a
+          href={`${baseUrl}#inicio`}
+          onClick={(event) => {
+            event.preventDefault();
+            if (isHome) {
+              document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              return;
+            }
+            navigateHome('#inicio');
+          }}
+          aria-label="OXI-GAS - Inicio"
+          className="shrink-0"
+        >
           <img
             src={oxiGasLogo}
             alt="OXI-GAS Ferretería Industrial"
@@ -59,7 +87,13 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
           {mainLinks.map((link) => (
             <a
               key={link.name}
-              href={link.href}
+              href={`${baseUrl}${link.href}`}
+              onClick={(event) => {
+                if (!isHome) {
+                  event.preventDefault();
+                  navigateHome(link.href);
+                }
+              }}
               className="text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors"
             >
               {link.name}
@@ -92,7 +126,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
                     {productLinks.map((link) => (
                       <a
                         key={link.name}
-                        href={link.href}
+                        href={link.name === 'Ver catálogo completo' ? `${baseUrl}catalogo` : `${baseUrl}${link.href}`}
                         onClick={() => setProductsOpen(false)}
                         className="block rounded-xl px-4 py-3 text-[hsl(var(--text-main))] hover:bg-[hsl(var(--surface-2))] hover:text-primary transition-colors"
                       >
@@ -145,25 +179,95 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
             className="lg:hidden bg-[hsl(var(--surface-1))] border-t border-[hsl(var(--surface-3))] overflow-hidden shadow-xl"
           >
             <div className="px-4 py-6 flex flex-col space-y-2">
-              <a href="#inicio" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a
+                href={`${baseUrl}#inicio`}
+                onClick={(event) => {
+                  if (!isHome) {
+                    event.preventDefault();
+                    navigateHome('#inicio');
+                  }
+                  setMobileMenuOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]"
+              >
                 Inicio
               </a>
-              <a href="#gases" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a
+                href={`${baseUrl}#gases`}
+                onClick={(event) => {
+                  if (!isHome) {
+                    event.preventDefault();
+                    navigateHome('#gases');
+                  }
+                  setMobileMenuOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]"
+              >
                 Gases comprimidos
               </a>
-              <a href="#maquinas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a
+                href={`${baseUrl}#maquinas`}
+                onClick={(event) => {
+                  if (!isHome) {
+                    event.preventDefault();
+                    navigateHome('#maquinas');
+                  }
+                  setMobileMenuOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]"
+              >
                 Máquinas
               </a>
-              <a href="#seguridad" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a
+                href={`${baseUrl}#seguridad`}
+                onClick={(event) => {
+                  if (!isHome) {
+                    event.preventDefault();
+                    navigateHome('#seguridad');
+                  }
+                  setMobileMenuOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]"
+              >
                 Seguridad
               </a>
-              <a href="#marcas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a
+                href={`${baseUrl}#marcas`}
+                onClick={(event) => {
+                  if (!isHome) {
+                    event.preventDefault();
+                    navigateHome('#marcas');
+                  }
+                  setMobileMenuOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]"
+              >
                 Marcas
               </a>
-              <a href="#horarios" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a
+                href={`${baseUrl}#horarios`}
+                onClick={(event) => {
+                  if (!isHome) {
+                    event.preventDefault();
+                    navigateHome('#horarios');
+                  }
+                  setMobileMenuOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]"
+              >
                 Horarios
               </a>
-              <a href="#contacto" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a
+                href={`${baseUrl}#contacto`}
+                onClick={(event) => {
+                  if (!isHome) {
+                    event.preventDefault();
+                    navigateHome('#contacto');
+                  }
+                  setMobileMenuOpen(false);
+                }}
+                className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]"
+              >
                 Contacto
               </a>
             </div>

@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { WHATSAPP_URL } from '@/config/constants';
 
 export function Hero() {
+  const [, setLocation] = useLocation();
+
   return (
     <section 
       id="inicio" 
@@ -47,6 +50,19 @@ export function Hero() {
               className="inline-flex justify-center items-center bg-primary hover:bg-primary/90 text-white font-bold text-lg py-4 px-8 rounded-xl shadow-lg shadow-primary/20 transition-all duration-300"
             >
               Solicitar Cotización
+            </motion.a>
+
+            <motion.a
+              href="/catalogo"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={(event) => {
+                event.preventDefault();
+                setLocation('/catalogo');
+              }}
+              className="inline-flex justify-center items-center border-2 border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold text-lg py-4 px-8 rounded-xl transition-all duration-300"
+            >
+              Ver productos
             </motion.a>
             
             <motion.a 

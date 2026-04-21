@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { StatsBar } from '@/components/StatsBar';
@@ -12,31 +12,43 @@ import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { CompressedGases } from '@/components/CompressedGases';
 import { FeaturedMachines } from '@/components/FeaturedMachines';
+import { CatalogIntro } from '@/components/CatalogIntro';
 
-export default function Home() {
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window === 'undefined') return 'dark';
-    return (localStorage.getItem('oxi-gas-theme') as 'dark' | 'light') || 'dark';
-  });
+type HomeProps = {
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
+};
 
+export default function Home({ theme, onToggleTheme }: HomeProps) {
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'light') {
-      root.classList.add('light');
-    } else {
-      root.classList.remove('light');
+    let hash = window.location.hash;
+    if (!hash) {
+      try {
+        hash = sessionStorage.getItem('oxi-gas:pending-hash') ?? '';
+      } catch {
+        hash = '';
+      }
     }
-    localStorage.setItem('oxi-gas-theme', theme);
-  }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
-  };
+    if (!hash) return;
+
+    try {
+      sessionStorage.removeItem('oxi-gas:pending-hash');
+    } catch {
+      // ignore
+    }
+
+    const el = document.querySelector(hash);
+    if (el instanceof HTMLElement) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
 
   return (
     <main className="min-h-screen bg-background relative">
-      <Header theme={theme} onToggleTheme={toggleTheme} />
+      <Header theme={theme} onToggleTheme={onToggleTheme} />
       <Hero />
+      <CatalogIntro />
       <StatsBar />
       <Services />
       <CompressedGases />
