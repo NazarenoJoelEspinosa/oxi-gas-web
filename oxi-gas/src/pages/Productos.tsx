@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Building2, MessageCircle, PackageSearch, Search, SlidersHorizontal, Tag, X } from 'lucide-react';
+import { ArrowLeft, Building2, Check, PackageSearch, Plus, Search, SlidersHorizontal, Tag, X } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { QuoteCart } from '@/components/QuoteCart';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -15,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useTheme } from '@/hooks/useTheme';
-import { WHATSAPP_URL } from '@/config/constants';
+import { useQuoteCart } from '@/hooks/useQuoteCart';
 import {
   PRODUCT_BRANDS,
   PRODUCT_CATEGORIES,
@@ -60,6 +61,7 @@ function categoryLabel(value: ProductCategory): string {
 
 export default function Productos() {
   const { theme, toggleTheme } = useTheme();
+  const cart = useQuoteCart();
   const [brand, setBrand] = useState<BrandFilter>(ALL);
   const [category, setCategory] = useState<CategoryFilter>(ALL);
   const [query, setQuery] = useState<string>('');
@@ -217,7 +219,13 @@ export default function Productos() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  index={index}
+                  selected={cart.has(product.code)}
+                  onToggle={() => cart.toggle(product.code)}
+                />
               ))}
             </div>
           )}
@@ -226,6 +234,7 @@ export default function Productos() {
 
       <Footer />
       <WhatsAppButton />
+      <QuoteCart cart={cart} />
     </main>
   );
 }
@@ -274,16 +283,24 @@ function FilterChip({ label, onRemove }: FilterChipProps) {
 type ProductCardProps = {
   product: Product;
   index: number;
+  selected: boolean;
+  onToggle: () => void;
 };
 
-function ProductCard({ product, index }: ProductCardProps) {
+function ProductCard({ product, index, selected, onToggle }: ProductCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.4) }}
     >
-      <Card className="h-full border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] hover:border-primary/60 hover:shadow-lg transition-all duration-300">
+      <Card
+        className={`h-full transition-all duration-300 hover:shadow-lg ${
+          selected
+            ? 'border-primary/70 bg-[hsl(var(--surface-2))] ring-2 ring-primary/30'
+            : 'border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] hover:border-primary/60'
+        }`}
+      >
         <CardHeader className="gap-3">
           <div className="flex items-start justify-between gap-2">
             <Badge variant="outline" className="uppercase tracking-wider text-[10px]">
@@ -307,15 +324,28 @@ function ProductCard({ product, index }: ProductCardProps) {
             <span className="uppercase tracking-wider font-semibold">Código:</span>
             <span className="text-[hsl(var(--text-main))]">{product.code}</span>
           </div>
-          <a
-            href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hola, quiero cotizar el producto ${product.code} - ${product.name}`)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#25d366] hover:bg-[#25d366]/90 text-white font-semibold text-sm py-2.5 px-4 transition-colors"
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-pressed={selected}
+            className={`inline-flex items-center justify-center gap-2 rounded-lg font-semibold text-sm py-2.5 px-4 transition-colors border ${
+              selected
+                ? 'bg-primary text-white border-primary hover:bg-primary/90'
+                : 'bg-transparent text-[hsl(var(--text-main))] border-[hsl(var(--surface-3))] hover:border-primary hover:text-primary'
+            }`}
           >
-            <MessageCircle className="w-4 h-4" />
-            Cotizar por WhatsApp
-          </a>
+            {selected ? (
+              <>
+                <Check className="w-4 h-4" />
+                Agregado a la cotización
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4" />
+                Agregar a la cotización
+              </>
+            )}
+          </button>
         </CardContent>
       </Card>
     </motion.div>
