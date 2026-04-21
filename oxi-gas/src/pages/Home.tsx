@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { StatsBar } from '@/components/StatsBar';
@@ -12,26 +11,10 @@ import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { CompressedGases } from '@/components/CompressedGases';
 import { FeaturedMachines } from '@/components/FeaturedMachines';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function Home() {
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window === 'undefined') return 'dark';
-    return (localStorage.getItem('oxi-gas-theme') as 'dark' | 'light') || 'dark';
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'light') {
-      root.classList.add('light');
-    } else {
-      root.classList.remove('light');
-    }
-    localStorage.setItem('oxi-gas-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <main className="min-h-screen bg-background relative">

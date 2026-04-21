@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, ChevronDown } from 'lucide-react';
+import { Link } from 'wouter';
+import { Menu, X, Sun, Moon, ChevronDown, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import oxiGasLogo from '@assets/logo-v2.png';
@@ -24,17 +25,17 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
   }, []);
 
   const mainLinks = [
-    { name: 'Inicio', href: '#inicio' },
-    { name: 'Marcas', href: '#marcas' },
-    { name: 'Horarios', href: '#horarios' },
-    { name: 'Contacto', href: '#contacto' },
+    { name: 'Inicio', href: '/#inicio' },
+    { name: 'Marcas', href: '/#marcas' },
+    { name: 'Horarios', href: '/#horarios' },
+    { name: 'Contacto', href: '/#contacto' },
   ];
 
   const productLinks = [
-    { name: 'Gases comprimidos', href: '#gases' },
-    { name: 'Máquinas', href: '#maquinas' },
-    { name: 'Seguridad', href: '#seguridad' },
-    { name: 'Servicios', href: '#productos' },
+    { name: 'Gases comprimidos', href: '/#gases' },
+    { name: 'Máquinas', href: '/#maquinas' },
+    { name: 'Seguridad', href: '/#seguridad' },
+    { name: 'Servicios', href: '/#productos' },
   ];
 
   return (
@@ -71,13 +72,13 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
             onMouseEnter={() => setProductsOpen(true)}
             onMouseLeave={() => setProductsOpen(false)}
           >
-            <button
-              type="button"
+            <Link
+              href="/productos"
               className="inline-flex items-center gap-2 text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors"
             >
               Productos
               <ChevronDown size={16} />
-            </button>
+            </Link>
 
             <AnimatePresence>
               {productsOpen && (
@@ -89,6 +90,14 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
                   className="absolute left-0 top-full pt-4"
                 >
                   <div className="w-72 rounded-2xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] shadow-2xl p-3">
+                    <Link
+                      href="/productos"
+                      onClick={() => setProductsOpen(false)}
+                      className="flex items-center justify-between rounded-xl px-4 py-3 bg-primary/10 text-primary font-semibold hover:bg-primary/15 transition-colors mb-2"
+                    >
+                      Ver catálogo completo
+                      <ArrowRight size={16} />
+                    </Link>
                     {productLinks.map((link) => (
                       <a
                         key={link.name}
@@ -145,25 +154,33 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
             className="lg:hidden bg-[hsl(var(--surface-1))] border-t border-[hsl(var(--surface-3))] overflow-hidden shadow-xl"
           >
             <div className="px-4 py-6 flex flex-col space-y-2">
-              <a href="#inicio" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <Link
+                href="/productos"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-4 py-3 rounded-lg bg-primary/10 text-primary font-semibold"
+              >
+                Ver catálogo completo
+                <ArrowRight size={16} />
+              </Link>
+              <a href="/#inicio" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
                 Inicio
               </a>
-              <a href="#gases" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a href="/#gases" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
                 Gases comprimidos
               </a>
-              <a href="#maquinas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a href="/#maquinas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
                 Máquinas
               </a>
-              <a href="#seguridad" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a href="/#seguridad" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
                 Seguridad
               </a>
-              <a href="#marcas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a href="/#marcas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
                 Marcas
               </a>
-              <a href="#horarios" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a href="/#horarios" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
                 Horarios
               </a>
-              <a href="#contacto" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
+              <a href="/#contacto" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
                 Contacto
               </a>
             </div>
