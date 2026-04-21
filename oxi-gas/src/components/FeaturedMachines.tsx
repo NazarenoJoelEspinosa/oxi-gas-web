@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
-
-const whatsappNumber = '5491134446666';
+import { whatsappUrl } from '@/config/constants';
 
 const machines = [
   {
@@ -49,12 +48,10 @@ export function FeaturedMachines() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
           {machines.map((machine, index) => {
-            const message = `Hola OXI-GAS, quiero consultar por ${machine.name} de ${machine.brand}.`;
-
             return (
               <motion.a
                 key={machine.name}
-                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
+                href={whatsappUrl(`Hola OXI-GAS, quiero consultar por ${machine.name} de ${machine.brand}.`)}
                 target="_blank"
                 rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 24 }}

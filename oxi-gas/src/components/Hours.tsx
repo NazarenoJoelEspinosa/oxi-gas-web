@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Clock, MapPin, Phone } from 'lucide-react';
+import { CONTACT, ADDRESS, HOURS } from '@/config/constants';
 
 export function Hours() {
   return (
@@ -22,20 +23,20 @@ export function Hours() {
             
             <div className="space-y-6">
               <div className="bg-[#162033] rounded-2xl p-8 border-l-4 border-primary shadow-lg">
-                <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-wider">Lunes a Viernes</h3>
+                <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-wider">{HOURS.weekdays.label}</h3>
                 <div className="flex flex-col sm:flex-row sm:items-center text-2xl font-medium text-[#f0f4f8] gap-2 sm:gap-6">
-                  <span>08:00 – 12:00</span>
+                  <span>{HOURS.weekdays.morning}</span>
                   <span className="hidden sm:block text-[#2a3f58]">|</span>
-                  <span>13:30 – 18:00</span>
+                  <span>{HOURS.weekdays.afternoon}</span>
                 </div>
               </div>
               
               <div className="bg-[#162033] rounded-2xl p-8 border border-[#2a3f58] shadow-lg">
-                <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-wider">Sábados</h3>
+                <h3 className="text-xl font-bold text-white mb-4 uppercase tracking-wider">{HOURS.saturday.label}</h3>
                 <div className="text-2xl font-medium text-[#f0f4f8]">
-                  08:00 – 13:00
+                  {HOURS.saturday.hours}
                 </div>
-                <p className="text-[#8fa3b8] mt-4 font-medium">Domingos: Cerrado</p>
+                <p className="text-[#8fa3b8] mt-4 font-medium">{HOURS.sunday.label}: {HOURS.sunday.hours}</p>
               </div>
             </div>
           </motion.div>
@@ -59,14 +60,16 @@ export function Hours() {
                   <MapPin className="w-6 h-6 text-primary shrink-0 mt-1" />
                   <div>
                     <h4 className="text-white font-bold mb-1">Dirección</h4>
-                    <p className="text-[#8fa3b8]">Acosta 1906<br/>B1702GHF Ciudadela, Prov. de Buenos Aires</p>
+                    <p className="text-[#8fa3b8]">
+                      {ADDRESS.street}<br/>{ADDRESS.postalCode} {ADDRESS.city}, Prov. de Buenos Aires
+                    </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-4">
                   <Phone className="w-6 h-6 text-primary shrink-0 mt-1" />
                   <div>
                     <h4 className="text-white font-bold mb-1">Teléfono</h4>
-                    <p className="text-[#8fa3b8]">+54 9 11 3444-6666</p>
+                    <p className="text-[#8fa3b8]">{CONTACT.phone}</p>
                   </div>
                 </li>
               </ul>
@@ -74,7 +77,7 @@ export function Hours() {
               <div className="flex-grow w-full rounded-xl overflow-hidden border border-[#2a3f58] min-h-[200px]">
                 <iframe
                   title="Ubicación OXI-GAS"
-                  src="https://maps.google.com/maps?q=Acosta+1906,+Ciudadela,+Provincia+de+Buenos+Aires,+Argentina&output=embed&hl=es&z=16"
+                  src={ADDRESS.mapsEmbed}
                   width="100%"
                   height="100%"
                   style={{ border: 0, minHeight: '200px', display: 'block' }}

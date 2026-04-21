@@ -5,9 +5,9 @@ import logo3m from '@assets/logo-3m.png';
 import logoDewalt from '@assets/logo-dewalt.png';
 import logoBremen from '@assets/logo-bremen.png';
 import logoBosch from '@assets/logo-bosch.png';
+import { whatsappUrl } from '@/config/constants';
 
 const base = import.meta.env.BASE_URL;
-const whatsappNumber = '5491134446666';
 
 const brands = [
   { name: '3M', src: logo3m },
@@ -120,12 +120,10 @@ export function Brands() {
               className="flex gap-3 sm:gap-4 md:gap-6 overflow-x-auto scroll-smooth no-scrollbar snap-x snap-mandatory px-1"
             >
               {brands.map((brand, index) => {
-                const message = `Hola OXI-GAS, quiero consultar por productos de la marca ${brand.name}.`;
-
                 return (
                   <a
                     key={`${brand.name}-${index}`}
-                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`}
+                    href={whatsappUrl(`Hola OXI-GAS, quiero consultar por productos de la marca ${brand.name}.`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group snap-center flex-shrink-0 w-[220px] h-[92px] sm:w-[240px] sm:h-[96px] md:w-[180px] md:h-[105px] rounded-2xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-1))] hover:border-primary hover:-translate-y-1 transition-all duration-300 px-4"

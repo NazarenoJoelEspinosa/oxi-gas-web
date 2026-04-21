@@ -51,17 +51,20 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
           <img
             src={oxiGasLogo}
             alt="OXI-GAS Ferretería Industrial"
-            className="h-20 w-auto object-contain scale-150"
+            className="h-10 w-auto max-w-[160px] object-contain"
           />
         </a>
 
         <nav className="hidden lg:flex items-center gap-8">
-          <a
-            href="#inicio"
-            className="text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors"
-          >
-            Inicio
-          </a>
+          {mainLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors"
+            >
+              {link.name}
+            </a>
+          ))}
 
           <div
             className="relative"
@@ -90,6 +93,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
                       <a
                         key={link.name}
                         href={link.href}
+                        onClick={() => setProductsOpen(false)}
                         className="block rounded-xl px-4 py-3 text-[hsl(var(--text-main))] hover:bg-[hsl(var(--surface-2))] hover:text-primary transition-colors"
                       >
                         {link.name}
@@ -100,16 +104,6 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
               )}
             </AnimatePresence>
           </div>
-
-          {mainLinks.slice(1).map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors"
-            >
-              {link.name}
-            </a>
-          ))}
 
           <button
             type="button"

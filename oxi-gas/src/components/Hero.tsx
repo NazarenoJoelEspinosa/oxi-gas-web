@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { WHATSAPP_URL } from '@/config/constants';
 
 export function Hero() {
   return (
@@ -49,7 +50,7 @@ export function Hero() {
             </motion.a>
             
             <motion.a 
-              href="https://wa.me/5491134446666"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.02 }}

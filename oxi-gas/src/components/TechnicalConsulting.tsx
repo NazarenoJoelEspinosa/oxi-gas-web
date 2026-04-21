@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { WHATSAPP_URL } from '@/config/constants';
 
 const consultingItems = [
   {
@@ -61,7 +62,7 @@ export function TechnicalConsulting() {
           </div>
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
             <a 
-              href="https://wa.me/5491134446666" 
+              href={WHATSAPP_URL} 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex justify-center items-center gap-2 bg-[#25d366] hover:bg-[#25d366]/90 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-[#25d366]/20"

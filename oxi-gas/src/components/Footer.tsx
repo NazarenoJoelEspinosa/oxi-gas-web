@@ -1,4 +1,5 @@
 import { Phone, Clock, Instagram } from 'lucide-react';
+import { WHATSAPP_URL, CONTACT, HOURS } from '@/config/constants';
 
 export function Footer() {
   return (
@@ -31,22 +32,24 @@ export function Footer() {
             <h4 className="text-xl font-bold mb-6 font-display">Información</h4>
             <ul className="space-y-4">
               <li>
-                <a href="https://wa.me/5491134446666" target="_blank" rel="noopener noreferrer" className="flex items-center text-[#8fa3b8] hover:text-[#25d366] transition-colors group">
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="flex items-center text-[#8fa3b8] hover:text-[#25d366] transition-colors group">
                   <div className="w-10 h-10 bg-[#162033] rounded-full flex items-center justify-center mr-4 group-hover:bg-[#25d366]/20 transition-colors">
                     <Phone className="w-5 h-5" />
                   </div>
-                  <span className="text-lg">+54 9 11 3444-6666</span>
+                  <span className="text-lg">{CONTACT.phone}</span>
                 </a>
               </li>
               <li className="flex items-center text-[#8fa3b8]">
                 <div className="w-10 h-10 bg-[#162033] rounded-full flex items-center justify-center mr-4 shrink-0">
                   <Clock className="w-5 h-5" />
                 </div>
-                <span className="text-sm">Lun-Vie: 8 a 12hs / 13:30 a 18hs<br/>Sáb: 8 a 13hs</span>
+                <span className="text-sm">
+                  Lun-Vie: {HOURS.weekdays.short}<br/>Sáb: {HOURS.saturday.short}
+                </span>
               </li>
               <li>
                 <a
-                  href="https://www.instagram.com/ferreteriaoxigas/"
+                  href={CONTACT.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center text-[#8fa3b8] hover:text-[#e1306c] transition-colors group"
@@ -54,7 +57,7 @@ export function Footer() {
                   <div className="w-10 h-10 bg-[#162033] rounded-full flex items-center justify-center mr-4 group-hover:bg-[#e1306c]/20 transition-colors">
                     <Instagram className="w-5 h-5" />
                   </div>
-                  <span className="text-lg">@ferreteriaoxigas</span>
+                  <span className="text-lg">{CONTACT.instagram}</span>
                 </a>
               </li>
             </ul>

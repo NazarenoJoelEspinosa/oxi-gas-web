@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { WHATSAPP_URL } from '@/config/constants';
 
 export function WhatsAppButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <motion.a
-          href="https://wa.me/5491134446666"
+          href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-[100] bg-[#25d366] hover:bg-[#25d366]/90 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg shadow-[#25d366]/40 transition-colors duration-300 group"

@@ -1,38 +1,95 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin } from 'lucide-react';
+import { whatsappUrl, ADDRESS } from '@/config/constants';
+
+type FormFields = {
+  nombre: string;
+  empresa: string;
+  telefono: string;
+  direccion: string;
+  mensaje: string;
+};
+
+type FormErrors = Partial<Record<keyof FormFields, string>>;
+
+function validateForm(fields: FormFields): FormErrors {
+  const errors: FormErrors = {};
+
+  if (!fields.nombre.trim()) {
+    errors.nombre = 'El nombre es obligatorio.';
+  }
+
+  const telefonoLimpio = fields.telefono.replace(/\D/g, '');
+  if (!telefonoLimpio) {
+    errors.telefono = 'El teléfono es obligatorio.';
+  } else if (telefonoLimpio.length < 10 || telefonoLimpio.length > 11) {
+    errors.telefono = 'Ingresá un número válido (10 u 11 dígitos, sin el 0 ni el 15).';
+  }
+
+  if (!fields.mensaje.trim()) {
+    errors.mensaje = 'Contanos qué necesitás cotizar.';
+  }
+
+  return errors;
+}
+
+const inputBase =
+  'w-full bg-[hsl(var(--surface-0))] border rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all';
 
 export function QuoteForm() {
-  const [nombre, setNombre] = useState('');
-  const [empresa, setEmpresa] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [mensaje, setMensaje] = useState('');
+  const [fields, setFields] = useState<FormFields>({
+    nombre: '',
+    empresa: '',
+    telefono: '',
+    direccion: '',
+    mensaje: '',
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof FormFields, boolean>>>({});
+
+  const set = (key: keyof FormFields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = key === 'telefono' ? e.target.value.replace(/\D/g, '') : e.target.value;
+    const updated = { ...fields, [key]: value };
+    setFields(updated);
+    if (touched[key]) {
+      setErrors(validateForm(updated));
+    }
+  };
+
+  const blur = (key: keyof FormFields) => () => {
+    setTouched((t) => ({ ...t, [key]: true }));
+    setErrors(validateForm(fields));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (telefono.length < 10 || telefono.length > 11) {
-  alert('Ingresá un número de teléfono válido (10 u 11 dígitos)');
-  return;
-}
+    const allTouched = { nombre: true, empresa: true, telefono: true, direccion: true, mensaje: true };
+    setTouched(allTouched);
+    const validationErrors = validateForm(fields);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
 
     const lines = [
       'Hola OXI-GAS, me comunico desde la web.',
       '',
-      `*Nombre:* ${nombre}`,
-      empresa ? `*Empresa:* ${empresa}` : null,
-      `*Teléfono:* ${telefono}`,
-      direccion ? `*Dirección:* ${direccion}` : null,
+      `*Nombre:* ${fields.nombre}`,
+      fields.empresa ? `*Empresa:* ${fields.empresa}` : null,
+      `*Teléfono:* ${fields.telefono}`,
+      fields.direccion ? `*Dirección:* ${fields.direccion}` : null,
       '',
       '*Consulta:*',
-      mensaje,
+      fields.mensaje,
     ]
       .filter((l) => l !== null)
       .join('\n');
 
-    const url = `https://wa.me/5491134446666?text=${encodeURIComponent(lines)}`;
+    const url = whatsappUrl(lines);
     window.open(url, '_blank', 'noopener,noreferrer');
   };
+
+  const fieldClass = (key: keyof FormFields) =>
+    `${inputBase} ${touched[key] && errors[key] ? 'border-red-500/70' : 'border-[hsl(var(--surface-3))]'}`;
 
   return (
     <section id="contacto" className="py-24 bg-[hsl(var(--surface-2))]">
@@ -58,7 +115,7 @@ export function QuoteForm() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="bg-[hsl(var(--surface-1))] rounded-3xl p-8 md:p-12 shadow-2xl border border-[hsl(var(--surface-3))]"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} noValidate className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="nombre" className="block text-sm font-medium text-[hsl(var(--text-soft))]">
@@ -67,12 +124,16 @@ export function QuoteForm() {
                   <input
                     type="text"
                     id="nombre"
-                    required
-                    value={nombre}
-                    onChange={e => setNombre(e.target.value)}
-                    className="w-full bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    value={fields.nombre}
+                    onChange={set('nombre')}
+                    onBlur={blur('nombre')}
+                    className={fieldClass('nombre')}
                     placeholder="Juan Pérez"
+                    autoComplete="name"
                   />
+                  {touched.nombre && errors.nombre && (
+                    <p className="text-xs text-red-400 mt-1">{errors.nombre}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -82,10 +143,11 @@ export function QuoteForm() {
                   <input
                     type="text"
                     id="empresa"
-                    value={empresa}
-                    onChange={e => setEmpresa(e.target.value)}
-                    className="w-full bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    value={fields.empresa}
+                    onChange={set('empresa')}
+                    className={fieldClass('empresa')}
                     placeholder="Nombre de tu empresa"
+                    autoComplete="organization"
                   />
                 </div>
               </div>
@@ -96,20 +158,19 @@ export function QuoteForm() {
                     Teléfono <span className="text-primary">*</span>
                   </label>
                   <input
-  type="tel"
-  id="telefono"
-  required
-  value={telefono}
-  onChange={(e) => {
-    const valor = e.target.value.replace(/\D/g, '');
-    setTelefono(valor);
-  }}
-  pattern="[0-9]{10,11}"
-  maxLength={11}
-  minLength={10}
-  className="w-full bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary"
-  placeholder="Ej: 1123456789"
-/>
+                    type="tel"
+                    id="telefono"
+                    value={fields.telefono}
+                    onChange={set('telefono')}
+                    onBlur={blur('telefono')}
+                    className={fieldClass('telefono')}
+                    placeholder="Ej: 1123456789"
+                    autoComplete="tel"
+                    inputMode="numeric"
+                  />
+                  {touched.telefono && errors.telefono && (
+                    <p className="text-xs text-red-400 mt-1">{errors.telefono}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -119,10 +180,11 @@ export function QuoteForm() {
                   <input
                     type="text"
                     id="direccion"
-                    value={direccion}
-                    onChange={e => setDireccion(e.target.value)}
-                    className="w-full bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    value={fields.direccion}
+                    onChange={set('direccion')}
+                    className={fieldClass('direccion')}
                     placeholder="Ej: Acosta 1906, Ciudadela"
+                    autoComplete="street-address"
                   />
                 </div>
               </div>
@@ -133,13 +195,16 @@ export function QuoteForm() {
                 </label>
                 <textarea
                   id="mensaje"
-                  required
-                  value={mensaje}
-                  onChange={e => setMensaje(e.target.value)}
+                  value={fields.mensaje}
+                  onChange={set('mensaje')}
+                  onBlur={blur('mensaje')}
                   rows={5}
-                  className="w-full bg-[hsl(var(--surface-0))] border border-[hsl(var(--surface-3))] rounded-xl px-4 py-3 text-[hsl(var(--text-main))] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                  className={`${fieldClass('mensaje')} resize-none`}
                   placeholder="Contanos qué necesitás cotizar..."
                 />
+                {touched.mensaje && errors.mensaje && (
+                  <p className="text-xs text-red-400 mt-1">{errors.mensaje}</p>
+                )}
               </div>
 
               <button
@@ -165,15 +230,15 @@ export function QuoteForm() {
             <h3 className="text-2xl font-bold text-[hsl(var(--text-main))] mb-4">Dirección del local</h3>
 
             <p className="text-[hsl(var(--text-soft))] text-lg leading-relaxed mb-6">
-              Acosta 1906
+              {ADDRESS.street}
               <br />
-              Ciudadela, Provincia de Buenos Aires
+              {ADDRESS.city}, {ADDRESS.province}
             </p>
 
             <div className="rounded-2xl overflow-hidden border border-[hsl(var(--surface-3))]">
               <iframe
                 title="Mapa OXI-GAS"
-                src="https://maps.google.com/maps?q=Acosta+1906,+Ciudadela,+Provincia+de+Buenos+Aires,+Argentina&output=embed&hl=es&z=16"
+                src={ADDRESS.mapsEmbed}
                 width="100%"
                 height="260"
                 style={{ border: 0, display: 'block' }}
