@@ -85,7 +85,7 @@ export default function Productos() {
       <section className="pt-32 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(var(--text-muted))] hover:text-primary transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(var(--text-soft))] hover:text-primary transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Volver al inicio
@@ -98,7 +98,7 @@ export default function Productos() {
           <h1 className="text-4xl sm:text-5xl font-extrabold text-[hsl(var(--text-main))] tracking-tight">
             Todos nuestros productos
           </h1>
-          <p className="text-lg text-[hsl(var(--text-muted))] max-w-2xl">
+          <p className="text-lg text-[hsl(var(--text-soft))] max-w-2xl">
             Filtrá por marca o categoría para encontrar lo que necesitás. Para cotizar o consultar
             stock, escribinos por WhatsApp.
           </p>
@@ -120,7 +120,7 @@ export default function Productos() {
                 <button
                   type="button"
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-muted))] hover:text-primary transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-soft))] hover:text-primary transition-colors"
                 >
                   <X className="h-3.5 w-3.5" />
                   Limpiar
@@ -132,21 +132,21 @@ export default function Productos() {
           <div className="mb-4">
             <FilterField label="Buscar" htmlFor="filter-search" icon={<Search className="h-3.5 w-3.5" />}>
               <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(var(--text-muted))]" />
+                <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(var(--text-soft))]" />
                 <input
                   id="filter-search"
                   type="search"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Buscá por nombre, código o marca (ej: teflon, WE6481, aligas)"
-                  className="w-full h-11 pl-10 pr-10 rounded-md border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-2))] text-sm text-[hsl(var(--text-main))] placeholder:text-[hsl(var(--text-muted))] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-colors"
+                  className="w-full h-11 pl-10 pr-10 rounded-md border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-2))] text-sm text-[hsl(var(--text-main))] placeholder:text-[hsl(var(--text-soft))] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-colors"
                 />
                 {query !== '' && (
                   <button
                     type="button"
                     onClick={() => setQuery('')}
                     aria-label="Limpiar búsqueda"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-6 w-6 rounded-full text-[hsl(var(--text-muted))] hover:text-[hsl(var(--text-main))] hover:bg-[hsl(var(--surface-3))] transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-6 w-6 rounded-full text-[hsl(var(--text-soft))] hover:text-[hsl(var(--text-main))] hover:bg-[hsl(var(--surface-3))] transition-colors"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -194,7 +194,7 @@ export default function Productos() {
 
           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-2 mt-5 pt-5 border-t border-[hsl(var(--surface-3))]">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-muted))]">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-soft))]">
                 Activos:
               </span>
               {query.trim() !== '' && (
@@ -251,7 +251,7 @@ function FilterField({ label, htmlFor, icon, children }: FilterFieldProps) {
     <div className="flex flex-col gap-2 w-full">
       <label
         htmlFor={htmlFor}
-        className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[hsl(var(--text-muted))]"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[hsl(var(--text-soft))]"
       >
         {icon}
         {label}
@@ -315,12 +315,12 @@ function ProductCard({ product, index, selected, onToggle }: ProductCardProps) {
           <CardTitle className="text-lg text-[hsl(var(--text-main))] leading-snug">
             {product.name}
           </CardTitle>
-          <CardDescription className="text-sm text-[hsl(var(--text-muted))]">
+          <CardDescription className="text-sm text-[hsl(var(--text-soft))]">
             {product.brand}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <div className="inline-flex items-center gap-2 text-xs font-mono text-[hsl(var(--text-muted))]">
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-[hsl(var(--text-soft))]">
             <span className="uppercase tracking-wider font-semibold">Código:</span>
             <span className="text-[hsl(var(--text-main))]">{product.code}</span>
           </div>
@@ -357,11 +357,11 @@ type EmptyStateProps = { onReset: () => void };
 function EmptyState({ onReset }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center text-center py-20 rounded-2xl border border-dashed border-[hsl(var(--surface-3))]">
-      <PackageSearch className="h-12 w-12 text-[hsl(var(--text-muted))] mb-4" />
+      <PackageSearch className="h-12 w-12 text-[hsl(var(--text-soft))] mb-4" />
       <h2 className="text-xl font-bold text-[hsl(var(--text-main))]">
         No encontramos productos con esos filtros
       </h2>
-      <p className="mt-2 text-[hsl(var(--text-muted))] max-w-md">
+      <p className="mt-2 text-[hsl(var(--text-soft))] max-w-md">
         Probá con otra combinación o consultanos directamente, seguro tenemos lo que buscás.
       </p>
       <button

@@ -69,7 +69,7 @@ export function QuoteCart({ cart }: QuoteCartProps) {
               <ShoppingCart className="h-5 w-5 text-primary" />
               Mi cotización
             </SheetTitle>
-            <SheetDescription className="text-[hsl(var(--text-muted))]">
+            <SheetDescription className="text-[hsl(var(--text-soft))]">
               Revisá los productos y mandanos todo en un solo mensaje por WhatsApp.
             </SheetDescription>
           </SheetHeader>
@@ -100,7 +100,7 @@ export function QuoteCart({ cart }: QuoteCartProps) {
               <button
                 type="button"
                 onClick={() => cart.clear()}
-                className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-muted))] hover:text-destructive transition-colors py-1"
+                className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[hsl(var(--text-soft))] hover:text-destructive transition-colors py-1"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 Vaciar lista
@@ -122,19 +122,19 @@ function CartItem({ item, onRemove }: CartItemProps) {
   return (
     <li className="flex items-start gap-3 rounded-xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-2))] p-3">
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-mono uppercase tracking-wider text-[hsl(var(--text-muted))]">
+        <p className="text-xs font-mono uppercase tracking-wider text-[hsl(var(--text-soft))]">
           {item.code}
         </p>
         <p className="mt-0.5 text-sm font-semibold text-[hsl(var(--text-main))] leading-snug">
           {item.name}
         </p>
-        <p className="mt-1 text-xs text-[hsl(var(--text-muted))]">{item.brand}</p>
+        <p className="mt-1 text-xs text-[hsl(var(--text-soft))]">{item.brand}</p>
       </div>
       <button
         type="button"
         onClick={onRemove}
         aria-label={`Quitar ${item.name} de la cotización`}
-        className="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-md text-[hsl(var(--text-muted))] hover:text-destructive hover:bg-[hsl(var(--surface-3))] transition-colors"
+        className="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-md text-[hsl(var(--text-soft))] hover:text-destructive hover:bg-[hsl(var(--surface-3))] transition-colors"
       >
         <X className="h-4 w-4" />
       </button>
@@ -145,11 +145,11 @@ function CartItem({ item, onRemove }: CartItemProps) {
 function EmptyCart() {
   return (
     <div className="flex flex-col items-center justify-center text-center py-12">
-      <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-[hsl(var(--surface-2))] text-[hsl(var(--text-muted))] mb-4">
+      <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-[hsl(var(--surface-2))] text-[hsl(var(--text-soft))] mb-4">
         <ShoppingCart className="h-6 w-6" />
       </div>
       <p className="font-semibold text-[hsl(var(--text-main))]">Tu lista está vacía</p>
-      <p className="mt-1 text-sm text-[hsl(var(--text-muted))] max-w-xs">
+      <p className="mt-1 text-sm text-[hsl(var(--text-soft))] max-w-xs">
         Tocá el casillero de cada producto que quieras incluir en tu cotización.
       </p>
     </div>

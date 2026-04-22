@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export type Theme = 'dark' | 'light';
 
-const STORAGE_KEY = 'oxi-gas-theme';
+const STORAGE_KEY = 'oxi-gas-theme-v2';
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'dark';

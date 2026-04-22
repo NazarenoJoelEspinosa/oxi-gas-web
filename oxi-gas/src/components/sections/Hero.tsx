@@ -43,7 +43,7 @@ export function Hero() {
   return (
     <section
       id="inicio"
-      className="relative min-h-[88vh] flex items-center pt-28 pb-20 overflow-hidden bg-[hsl(var(--surface-0))]"
+      className="relative min-h-[78vh] sm:min-h-[88vh] flex items-center pt-24 sm:pt-28 pb-16 sm:pb-20 overflow-hidden bg-[hsl(var(--surface-0))]"
     >
       <div
         aria-hidden="true"
@@ -78,12 +78,12 @@ export function Hero() {
               Ferretería Industrial Profesional
             </motion.div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-[hsl(var(--text-main))] tracking-tight mb-6 leading-[1.05]">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[hsl(var(--text-main))] tracking-tight mb-5 sm:mb-6 leading-[1.05]">
               Gases Comprimidos y{' '}
               <span className="text-primary">Herramientas</span> Industriales
             </h1>
 
-            <p className="text-xl sm:text-2xl text-[hsl(var(--text-soft))] mb-10 font-medium max-w-2xl leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-[hsl(var(--text-soft))] mb-8 sm:mb-10 font-medium max-w-2xl leading-relaxed">
               Oxígeno · Acetileno · Argón · CO₂ | Equipos profesionales para soldadura y construcción
             </p>
 
