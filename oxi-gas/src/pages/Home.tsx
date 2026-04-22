@@ -1,17 +1,17 @@
-import { Header } from '@/components/Header';
-import { Hero } from '@/components/Hero';
-import { StatsBar } from '@/components/StatsBar';
-import { Services } from '@/components/Services';
-import { SafetyGear } from '@/components/SafetyGear';
-import { Brands } from '@/components/Brands';
-import { TechnicalConsulting } from '@/components/TechnicalConsulting';
-import { Hours } from '@/components/Hours';
-import { QuoteForm } from '@/components/QuoteForm';
-import { Footer } from '@/components/Footer';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { CompressedGases } from '@/components/CompressedGases';
-import { FeaturedMachines } from '@/components/FeaturedMachines';
-import { CatalogPreview } from '@/components/CatalogPreview';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { WhatsAppButton } from '@/components/layout/WhatsAppButton';
+import { Hero } from '@/components/sections/Hero';
+import { StatsBar } from '@/components/sections/StatsBar';
+import { CatalogPreview } from '@/components/sections/CatalogPreview';
+import { Services } from '@/components/sections/Services';
+import { CompressedGases } from '@/components/sections/CompressedGases';
+import { FeaturedMachines } from '@/components/sections/FeaturedMachines';
+import { SafetyGear } from '@/components/sections/SafetyGear';
+import { Brands } from '@/components/sections/Brands';
+import { TechnicalConsulting } from '@/components/sections/TechnicalConsulting';
+import { Hours } from '@/components/sections/Hours';
+import { QuoteForm } from '@/components/features/QuoteForm';
 import { useTheme } from '@/hooks/useTheme';
 
 export default function Home() {
