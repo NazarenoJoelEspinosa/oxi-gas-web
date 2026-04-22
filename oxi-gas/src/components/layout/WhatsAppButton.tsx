@@ -28,7 +28,10 @@ export function WhatsAppButton() {
           />
         </motion.a>
       </TooltipTrigger>
-      <TooltipContent side="left" className="bg-[#162033] text-white border-[#2a3f58]">
+      <TooltipContent
+        side="left"
+        className="bg-[hsl(var(--surface-2))] text-[hsl(var(--text-main))] border-[hsl(var(--surface-3))]"
+      >
         <p className="font-medium">Hacé tu pedido</p>
       </TooltipContent>
     </Tooltip>
