@@ -25,17 +25,17 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
   }, []);
 
 const mainLinks = [
-  { name: 'Inicio', href: '/#inicio' },
-  { name: 'Marcas', href: '/#marcas' },
-  { name: 'Horarios', href: '/#horarios' },
-  { name: 'Contacto', href: '/#contacto' },
+  { name: 'Inicio', href: '#inicio' },
+  { name: 'Marcas', href: '#marcas' },
+  { name: 'Horarios', href: '#horarios' },
+  { name: 'Contacto', href: '#contacto' },
 ];
 
 const productLinks = [
-  { name: 'Gases comprimidos', href: '/#gases' },
-  { name: 'Máquinas', href: '/#maquinas' },
-  { name: 'Seguridad', href: '/#seguridad' },
-  { name: 'Servicios', href: '/#productos' },
+  { name: 'Gases comprimidos', href: '#gases' },
+  { name: 'Máquinas', href: '#maquinas' },
+  { name: 'Seguridad', href: '#seguridad' },
+  { name: 'Servicios', href: '#productos' },
 ];
   
   return (
