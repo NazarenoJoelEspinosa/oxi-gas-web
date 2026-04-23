@@ -43,7 +43,8 @@ export function Hero() {
   return (
     <section
       id="inicio"
-      className="relative min-h-[78vh] sm:min-h-[88vh] flex items-center pt-24 sm:pt-28 pb-16 sm:pb-20 overflow-hidden bg-[hsl(var(--surface-0))]"
+      // ↓ Aumentado pt a pt-32 sm:pt-36 para que el header fijo no tape el contenido
+      className="relative min-h-[78vh] sm:min-h-[88vh] flex items-center pt-32 sm:pt-36 pb-16 sm:pb-20 overflow-hidden bg-[hsl(var(--surface-0))]"
     >
       <div
         aria-hidden="true"
