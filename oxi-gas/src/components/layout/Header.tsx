@@ -23,7 +23,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
+const base = import.meta.env.BASE_URL || '';
 const mainLinks = [
   { name: 'Inicio', href: `${base}/#inicio` },
   { name: 'Marcas', href: `${base}/#marcas` },
