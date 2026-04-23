@@ -24,20 +24,19 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const mainLinks = [
-    { name: 'Inicio', href: '#inicio' },
-    { name: 'Marcas', href: '#marcas' },
-    { name: 'Horarios', href: '#horarios' },
-    { name: 'Contacto', href: '#contacto' },
-  ];
+const mainLinks = [
+  { name: 'Inicio', href: `${base}/#inicio` },
+  { name: 'Marcas', href: `${base}/#marcas' },
+  { name: 'Horarios', href: `${base}/#horarios` },
+  { name: 'Contacto', href: `${base}/#contacto` },
+];
 
-  const productLinks = [
-    { name: 'Gases comprimidos', href: '#gases' },
-    { name: 'Máquinas', href: '#maquinas' },
-    { name: 'Seguridad', href: '#seguridad' },
-    { name: 'Servicios', href: '#productos' },
-  ];
-
+const productLinks = [
+  { name: 'Gases comprimidos', href: `${base}/#gases` },
+  { name: 'Máquinas', href: `${base}/#maquinas` },
+  { name: 'Seguridad', href: `${base}/#seguridad` },
+  { name: 'Servicios', href: `${base}/#productos` },
+];
   return (
     <header
       className={cn(
