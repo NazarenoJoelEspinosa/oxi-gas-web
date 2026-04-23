@@ -15,9 +15,13 @@ function Router() {
 }
 
 function App() {
+  // Limpia la barra final del BASE_URL para que wouter funcione correctamente
+  // en GitHub Pages (ej: "/oxi-gas" en vez de "/oxi-gas/")
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "") || "";
+
   return (
     <TooltipProvider>
-      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+      <WouterRouter base={base}>
         <Router />
       </WouterRouter>
     </TooltipProvider>
