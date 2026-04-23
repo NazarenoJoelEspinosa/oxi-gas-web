@@ -26,7 +26,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
 
 const mainLinks = [
   { name: 'Inicio', href: `${base}/#inicio` },
-  { name: 'Marcas', href: `${base}/#marcas' },
+  { name: 'Marcas', href: `${base}/#marcas` },
   { name: 'Horarios', href: `${base}/#horarios` },
   { name: 'Contacto', href: `${base}/#contacto` },
 ];
@@ -37,6 +37,7 @@ const productLinks = [
   { name: 'Seguridad', href: `${base}/#seguridad` },
   { name: 'Servicios', href: `${base}/#productos` },
 ];
+  
   return (
     <header
       className={cn(
