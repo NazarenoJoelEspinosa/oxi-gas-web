@@ -11,14 +11,30 @@ import {
 } from '@/components/ui/sheet';
 import { WHATSAPP_URL } from '@/config/constants';
 import { PRODUCTS, type Product } from '@/data/products';
-import type { QuoteCart as QuoteCartType } from '@/hooks/useQuoteCart';
+import type { CartItem, QuoteCart as QuoteCartType } from '@/hooks/useQuoteCart';
 
 type QuoteCartProps = {
   cart: QuoteCartType;
 };
 
-function buildWhatsAppHref(items: readonly Product[]): string {
-  const lines = items.map((item) => `• [${item.code}] ${item.name}`);
+type EnrichedItem = {
+  product: Product;
+  cartItem: CartItem;
+};
+
+function buildWhatsAppHref(enrichedItems: readonly EnrichedItem[]): string {
+  const lines = enrichedItems.map(({ product, cartItem }) => {
+    let line = `• [${product.code}] ${product.name}`;
+    if (cartItem.fields && Object.keys(cartItem.fields).length > 0) {
+      const fieldParts = product.custom_fields
+        ?.filter((f) => cartItem.fields![f.key]?.trim())
+        .map((f) => `${f.label}: ${cartItem.fields![f.key].trim()}`);
+      if (fieldParts && fieldParts.length > 0) {
+        line += ` (${fieldParts.join(', ')})`;
+      }
+    }
+    return line;
+  });
   const message = `Hola, quiero cotizar los siguientes productos:\n\n${lines.join('\n')}`;
   return `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
 }
@@ -26,11 +42,14 @@ function buildWhatsAppHref(items: readonly Product[]): string {
 export function QuoteCart({ cart }: QuoteCartProps) {
   const [open, setOpen] = useState(false);
 
-  const items = useMemo<readonly Product[]>(() => {
-    return cart.codes
-      .map((code) => PRODUCTS.find((product) => product.code === code))
-      .filter((product): product is Product => product !== undefined);
-  }, [cart.codes]);
+  const enrichedItems = useMemo<readonly EnrichedItem[]>(() => {
+    return cart.items
+      .map((cartItem) => {
+        const product = PRODUCTS.find((p) => p.code === cartItem.code);
+        return product ? { product, cartItem } : null;
+      })
+      .filter((item): item is EnrichedItem => item !== null);
+  }, [cart.items]);
 
   return (
     <>
@@ -75,27 +94,33 @@ export function QuoteCart({ cart }: QuoteCartProps) {
           </SheetHeader>
 
           <div className="flex-1 overflow-y-auto -mx-6 px-6 py-4">
-            {items.length === 0 ? (
+            {enrichedItems.length === 0 ? (
               <EmptyCart />
             ) : (
               <ul className="flex flex-col gap-3">
-                {items.map((item) => (
-                  <CartItem key={item.code} item={item} onRemove={() => cart.remove(item.code)} />
+                {enrichedItems.map(({ product, cartItem }) => (
+                  <CartItemRow
+                    key={product.code}
+                    product={product}
+                    cartItem={cartItem}
+                    onRemove={() => cart.remove(product.code)}
+                  />
                 ))}
               </ul>
             )}
           </div>
 
-          {items.length > 0 && (
+          {enrichedItems.length > 0 && (
             <SheetFooter className="flex-col gap-3 sm:flex-col sm:space-x-0 border-t border-[hsl(var(--surface-3))] pt-4">
               <a
-                href={buildWhatsAppHref(items)}
+                href={buildWhatsAppHref(enrichedItems)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#25d366] hover:bg-[#25d366]/90 text-white font-bold text-base py-3 px-4 transition-colors"
               >
                 <MessageCircle className="w-5 h-5" />
-                Cotizar {items.length} {items.length === 1 ? 'producto' : 'productos'} por WhatsApp
+                Cotizar {enrichedItems.length}{' '}
+                {enrichedItems.length === 1 ? 'producto' : 'productos'} por WhatsApp
               </a>
               <button
                 type="button"
@@ -113,27 +138,42 @@ export function QuoteCart({ cart }: QuoteCartProps) {
   );
 }
 
-type CartItemProps = {
-  item: Product;
+type CartItemRowProps = {
+  product: Product;
+  cartItem: CartItem;
   onRemove: () => void;
 };
 
-function CartItem({ item, onRemove }: CartItemProps) {
+function CartItemRow({ product, cartItem, onRemove }: CartItemRowProps) {
+  // Build a summary of completed custom fields
+  const fieldSummary = useMemo(() => {
+    if (!cartItem.fields || !product.custom_fields) return null;
+    const parts = product.custom_fields
+      .filter((f) => cartItem.fields![f.key]?.trim())
+      .map((f) => `${f.label}: ${cartItem.fields![f.key].trim()}`);
+    return parts.length > 0 ? parts.join(' · ') : null;
+  }, [product.custom_fields, cartItem.fields]);
+
   return (
     <li className="flex items-start gap-3 rounded-xl border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-2))] p-3">
       <div className="flex-1 min-w-0">
         <p className="text-xs font-mono uppercase tracking-wider text-[hsl(var(--text-soft))]">
-          {item.code}
+          {product.code}
         </p>
         <p className="mt-0.5 text-sm font-semibold text-[hsl(var(--text-main))] leading-snug">
-          {item.name}
+          {product.name}
         </p>
-        <p className="mt-1 text-xs text-[hsl(var(--text-soft))]">{item.brand}</p>
+        <p className="mt-1 text-xs text-[hsl(var(--text-soft))]">{product.brand}</p>
+        {fieldSummary && (
+          <p className="mt-1.5 text-xs font-medium text-amber-600 bg-amber-500/10 rounded px-2 py-1 leading-snug">
+            {fieldSummary}
+          </p>
+        )}
       </div>
       <button
         type="button"
         onClick={onRemove}
-        aria-label={`Quitar ${item.name} de la cotización`}
+        aria-label={`Quitar ${product.name} de la cotización`}
         className="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-md text-[hsl(var(--text-soft))] hover:text-destructive hover:bg-[hsl(var(--surface-3))] transition-colors"
       >
         <X className="h-4 w-4" />

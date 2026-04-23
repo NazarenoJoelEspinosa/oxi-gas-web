@@ -224,7 +224,7 @@ export default function Productos() {
                   product={product}
                   index={index}
                   selected={cart.has(product.code)}
-                  onToggle={() => cart.toggle(product.code)}
+                  onToggle={(fieldValues) => cart.toggle(product.code, fieldValues)}
                 />
               ))}
             </div>
@@ -284,10 +284,27 @@ type ProductCardProps = {
   product: Product;
   index: number;
   selected: boolean;
-  onToggle: () => void;
+  onToggle: (fieldValues?: Record<string, string>) => void;
 };
 
 function ProductCard({ product, index, selected, onToggle }: ProductCardProps) {
+  const hasCustomFields = product.custom_fields && product.custom_fields.length > 0;
+
+  // Local state for the custom field inputs
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    product.custom_fields?.forEach((f) => { initial[f.key] = ''; });
+    return initial;
+  });
+
+  const allFilled = !hasCustomFields || (
+    product.custom_fields!.every((f) => fieldValues[f.key]?.trim() !== '')
+  );
+
+  const handleToggle = () => {
+    onToggle(hasCustomFields ? fieldValues : undefined);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -306,11 +323,18 @@ function ProductCard({ product, index, selected, onToggle }: ProductCardProps) {
             <Badge variant="outline" className="uppercase tracking-wider text-[10px]">
               {categoryLabel(product.category)}
             </Badge>
-            {product.highlight && (
-              <Badge className="bg-primary/15 text-primary border-primary/30 uppercase tracking-wider text-[10px]">
-                {product.highlight}
-              </Badge>
-            )}
+            <div className="flex items-center gap-1.5">
+              {product.highlight && (
+                <Badge className="bg-primary/15 text-primary border-primary/30 uppercase tracking-wider text-[10px]">
+                  {product.highlight}
+                </Badge>
+              )}
+              {hasCustomFields && (
+                <Badge className="bg-amber-500/15 text-amber-600 border-amber-500/30 uppercase tracking-wider text-[10px]">
+                  A medida
+                </Badge>
+              )}
+            </div>
           </div>
           <CardTitle className="text-lg text-[hsl(var(--text-main))] leading-snug">
             {product.name}
@@ -324,13 +348,47 @@ function ProductCard({ product, index, selected, onToggle }: ProductCardProps) {
             <span className="uppercase tracking-wider font-semibold">Código:</span>
             <span className="text-[hsl(var(--text-main))]">{product.code}</span>
           </div>
+
+          {/* ── Custom fields ── */}
+          {hasCustomFields && (
+            <div className="flex flex-col gap-2.5 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-600">
+                Completá las medidas para cotizar
+              </p>
+              {product.custom_fields!.map((field) => (
+                <div key={field.key} className="flex flex-col gap-1">
+                  <label
+                    htmlFor={`${product.id}-${field.key}`}
+                    className="text-xs font-semibold text-[hsl(var(--text-soft))]"
+                  >
+                    {field.label}
+                  </label>
+                  <input
+                    id={`${product.id}-${field.key}`}
+                    type="text"
+                    value={fieldValues[field.key] ?? ''}
+                    onChange={(e) =>
+                      setFieldValues((prev) => ({ ...prev, [field.key]: e.target.value }))
+                    }
+                    placeholder={field.placeholder ?? ''}
+                    className="h-9 px-3 rounded-md border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-2))] text-sm text-[hsl(var(--text-main))] placeholder:text-[hsl(var(--text-soft))] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-colors"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
           <button
             type="button"
-            onClick={onToggle}
+            onClick={handleToggle}
+            disabled={!allFilled && !selected}
             aria-pressed={selected}
+            title={!allFilled && !selected ? 'Completá las medidas antes de agregar' : undefined}
             className={`inline-flex items-center justify-center gap-2 rounded-lg font-semibold text-sm py-2.5 px-4 transition-colors border ${
               selected
                 ? 'bg-primary text-white border-primary hover:bg-primary/90'
+                : !allFilled
+                ? 'bg-transparent text-[hsl(var(--text-soft))] border-[hsl(var(--surface-3))] opacity-50 cursor-not-allowed'
                 : 'bg-transparent text-[hsl(var(--text-main))] border-[hsl(var(--surface-3))] hover:border-primary hover:text-primary'
             }`}
           >
