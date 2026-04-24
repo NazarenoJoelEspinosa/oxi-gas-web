@@ -290,16 +290,18 @@ type ProductCardProps = {
 function ProductCard({ product, index, selected, onToggle }: ProductCardProps) {
   const hasCustomFields = product.custom_fields && product.custom_fields.length > 0;
 
-  // Local state for the custom field inputs
+  // Local state for the custom field inputs — siempre incluye "cantidad"
   const [fieldValues, setFieldValues] = useState<Record<string, string>>(() => {
-    const initial: Record<string, string> = {};
+    const initial: Record<string, string> = { cantidad: '' };
     product.custom_fields?.forEach((f) => { initial[f.key] = ''; });
     return initial;
   });
 
-  const allFilled = !hasCustomFields || (
-    product.custom_fields!.every((f) => fieldValues[f.key]?.trim() !== '')
-  );
+  // Cantidad siempre requerida; custom fields también si los tiene
+  const cantidadFilled = fieldValues['cantidad']?.trim() !== '';
+  const customFilled = !hasCustomFields ||
+    product.custom_fields!.every((f) => fieldValues[f.key]?.trim() !== '');
+  const allFilled = cantidadFilled && customFilled;
 
   const handleToggle = () => {
     onToggle(hasCustomFields ? fieldValues : undefined);
@@ -349,34 +351,59 @@ function ProductCard({ product, index, selected, onToggle }: ProductCardProps) {
             <span className="text-[hsl(var(--text-main))]">{product.code}</span>
           </div>
 
-          {/* ── Custom fields ── */}
-          {hasCustomFields && (
-            <div className="flex flex-col gap-2.5 p-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
+          {/* ── Cantidad + custom fields ── */}
+          <div className={`flex flex-col gap-2.5 p-3 rounded-lg border ${hasCustomFields ? 'bg-amber-500/5 border-amber-500/20' : 'bg-[hsl(var(--surface-2))] border-[hsl(var(--surface-3))]'}`}>
+            {hasCustomFields && (
               <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-600">
                 Completá las medidas para cotizar
               </p>
-              {product.custom_fields!.map((field) => (
-                <div key={field.key} className="flex flex-col gap-1">
-                  <label
-                    htmlFor={`${product.id}-${field.key}`}
-                    className="text-xs font-semibold text-[hsl(var(--text-soft))]"
-                  >
-                    {field.label}
-                  </label>
-                  <input
-                    id={`${product.id}-${field.key}`}
-                    type="text"
-                    value={fieldValues[field.key] ?? ''}
-                    onChange={(e) =>
-                      setFieldValues((prev) => ({ ...prev, [field.key]: e.target.value }))
-                    }
-                    placeholder={field.placeholder ?? ''}
-                    className="h-9 px-3 rounded-md border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-2))] text-sm text-[hsl(var(--text-main))] placeholder:text-[hsl(var(--text-soft))] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-colors"
-                  />
-                </div>
-              ))}
+            )}
+
+            {/* Campo cantidad — siempre visible para todos los productos */}
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor={`${product.id}-cantidad`}
+                className="text-xs font-semibold text-[hsl(var(--text-soft))]"
+              >
+                Cantidad
+              </label>
+              <input
+                id={`${product.id}-cantidad`}
+                type="text"
+                inputMode="numeric"
+                value={fieldValues['cantidad'] ?? ''}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/[^0-9]/g, '');
+                  setFieldValues((prev) => ({ ...prev, cantidad: val }));
+                }}
+                placeholder="Ej: 2"
+                className="h-9 px-3 rounded-md border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-0))] text-sm text-[hsl(var(--text-main))] placeholder:text-[hsl(var(--text-soft))] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-colors"
+              />
             </div>
-          )}
+
+            {/* Custom fields específicos (metros cúbicos, etc.) */}
+            {hasCustomFields && product.custom_fields!.map((field) => (
+              <div key={field.key} className="flex flex-col gap-1">
+                <label
+                  htmlFor={`${product.id}-${field.key}`}
+                  className="text-xs font-semibold text-[hsl(var(--text-soft))]"
+                >
+                  {field.label}
+                </label>
+                <input
+                  id={`${product.id}-${field.key}`}
+                  type="text"
+                  value={fieldValues[field.key] ?? ''}
+                  onChange={(e) =>
+                    setFieldValues((prev) => ({ ...prev, [field.key]: e.target.value }))
+                  }
+                  placeholder={field.placeholder ?? ''}
+                  className="h-9 px-3 rounded-md border border-[hsl(var(--surface-3))] bg-[hsl(var(--surface-0))] text-sm text-[hsl(var(--text-main))] placeholder:text-[hsl(var(--text-soft))] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-colors"
+                />
+              </div>
+            ))}
+          </div>
+
 
           <button
             type="button"
