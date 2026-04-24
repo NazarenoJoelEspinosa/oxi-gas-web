@@ -25,17 +25,24 @@ type EnrichedItem = {
 function buildWhatsAppHref(enrichedItems: readonly EnrichedItem[]): string {
   const lines = enrichedItems.map(({ product, cartItem }) => {
     let line = `• [${product.code}] ${product.name}`;
-    if (cartItem.fields && Object.keys(cartItem.fields).length > 0) {
+    const extras: string[] = [];
+
+    // Cantidad (campo estándar agregado a todos los productos)
+    const cantidad = cartItem.fields?.['cantidad']?.trim();
+    if (cantidad) extras.push(`Cantidad: ${cantidad}`);
+
+    // Custom fields del producto (metros cúbicos, etc.)
+    if (cartItem.fields && product.custom_fields) {
       const fieldParts = product.custom_fields
-        ?.filter((f) => cartItem.fields![f.key]?.trim())
+        .filter((f) => cartItem.fields![f.key]?.trim())
         .map((f) => `${f.label}: ${cartItem.fields![f.key].trim()}`);
-      if (fieldParts && fieldParts.length > 0) {
-        line += ` (${fieldParts.join(', ')})`;
-      }
+      extras.push(...fieldParts);
     }
+
+    if (extras.length > 0) line += ` (${extras.join(', ')})`;
     return line;
   });
-  const message = `Hola, quiero cotizar los siguientes productos:\n\n${lines.join('\n')}`;
+  const message = `Hola, quiero consultar los siguientes productos:\n\n${lines.join('\n')}`;
   return `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
 }
 
@@ -145,12 +152,20 @@ type CartItemRowProps = {
 };
 
 function CartItemRow({ product, cartItem, onRemove }: CartItemRowProps) {
-  // Build a summary of completed custom fields
+  // Build a summary of completed fields (cantidad + custom fields)
   const fieldSummary = useMemo(() => {
-    if (!cartItem.fields || !product.custom_fields) return null;
-    const parts = product.custom_fields
-      .filter((f) => cartItem.fields![f.key]?.trim())
-      .map((f) => `${f.label}: ${cartItem.fields![f.key].trim()}`);
+    if (!cartItem.fields) return null;
+    const parts: string[] = [];
+
+    const cantidad = cartItem.fields['cantidad']?.trim();
+    if (cantidad) parts.push(`Cantidad: ${cantidad}`);
+
+    if (product.custom_fields) {
+      product.custom_fields
+        .filter((f) => cartItem.fields![f.key]?.trim())
+        .forEach((f) => parts.push(`${f.label}: ${cartItem.fields![f.key].trim()}`));
+    }
+
     return parts.length > 0 ? parts.join(' · ') : null;
   }, [product.custom_fields, cartItem.fields]);
 
