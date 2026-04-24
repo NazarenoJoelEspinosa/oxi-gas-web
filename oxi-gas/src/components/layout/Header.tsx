@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { Menu, X, Sun, Moon, ChevronDown, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -10,41 +10,69 @@ type HeaderProps = {
   onToggleTheme: () => void;
 };
 
+// Navega al home y luego hace scroll al anchor correcto
+function useHashNavigate() {
+  const [, setLocation] = useLocation();
+
+  return (hash: string) => {
+    const id = hash.replace('#', '');
+
+    // Si ya estamos en el home, solo scrollear
+    if (window.location.pathname.endsWith('/') || window.location.pathname === '') {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+
+    // Si estamos en otra página, navegar al home y luego scrollear
+    setLocation('/');
+    // Esperar a que el DOM del home se monte
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 350);
+  };
+}
+
 export function Header({ theme, onToggleTheme }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const navigateTo = useHashNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-const mainLinks = [
-  { name: 'Inicio', href: '#inicio' },
-  { name: 'Marcas', href: '#marcas' },
-  { name: 'Horarios', href: '#horarios' },
-  { name: 'Contacto', href: '#contacto' },
-];
+  const mainLinks = [
+    { name: 'Inicio', hash: 'inicio' },
+    { name: 'Marcas', hash: 'marcas' },
+    { name: 'Horarios', hash: 'horarios' },
+    { name: 'Contacto', hash: 'contacto' },
+  ];
 
-const productLinks = [
-  { name: 'Gases comprimidos', href: '#gases' },
-  { name: 'Máquinas', href: '#maquinas' },
-  { name: 'Seguridad', href: '#seguridad' },
-  { name: 'Servicios', href: '#productos' },
-];
-  
+  const productLinks = [
+    { name: 'Gases comprimidos', hash: 'gases' },
+    { name: 'Máquinas', hash: 'maquinas' },
+    { name: 'Seguridad', hash: 'seguridad' },
+    { name: 'Servicios', hash: 'productos' },
+  ];
+
   return (
     <header
       className={cn(
         'fixed top-0 w-full z-50 transition-all duration-300 border-b',
         isScrolled
-          ? 'bg-[hsl(var(--surface-0))]/92 backdrop-blur-md shadow-lg border-[hsl(var(--surface-3))] py-4'
-          : 'bg-[hsl(var(--surface-0))] border-transparent py-6'
+          ? 'bg-[hsl(var(--surface-0))]/92 backdrop-blur-md shadow-lg border-[hsl(var(--surface-3))] py-3'
+          : 'bg-[hsl(var(--surface-0))] border-transparent py-4'
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center gap-4">
@@ -52,19 +80,21 @@ const productLinks = [
           <img
             src={oxiGasLogo}
             alt="OXI-GAS Ferretería Industrial"
-            className="h-14 sm:h-16 w-auto max-w-[220px] object-contain transition-transform hover:scale-[1.02]"
+            // Logo más grande: h-16 mobile, h-20 desktop
+            className="h-16 sm:h-20 w-auto object-contain transition-transform hover:scale-[1.02]"
           />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
           {mainLinks.map((link) => (
-            <a
+            <button
               key={link.name}
-              href={link.href}
-              className="text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors"
+              type="button"
+              onClick={() => navigateTo(link.hash)}
+              className="text-[hsl(var(--text-main))] hover:text-primary font-medium transition-colors bg-transparent border-none cursor-pointer"
             >
               {link.name}
-            </a>
+            </button>
           ))}
 
           <div
@@ -99,14 +129,17 @@ const productLinks = [
                       <ArrowRight size={16} />
                     </Link>
                     {productLinks.map((link) => (
-                      <a
+                      <button
                         key={link.name}
-                        href={link.href}
-                        onClick={() => setProductsOpen(false)}
-                        className="block rounded-xl px-4 py-3 text-[hsl(var(--text-main))] hover:bg-[hsl(var(--surface-2))] hover:text-primary transition-colors"
+                        type="button"
+                        onClick={() => {
+                          setProductsOpen(false);
+                          navigateTo(link.hash);
+                        }}
+                        className="w-full text-left block rounded-xl px-4 py-3 text-[hsl(var(--text-main))] hover:bg-[hsl(var(--surface-2))] hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
                       >
                         {link.name}
-                      </a>
+                      </button>
                     ))}
                   </div>
                 </motion.div>
@@ -162,27 +195,32 @@ const productLinks = [
                 Ver catálogo completo
                 <ArrowRight size={16} />
               </Link>
-              <a href="/#inicio" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
-                Inicio
-              </a>
-              <a href="/#gases" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
-                Gases comprimidos
-              </a>
-              <a href="/#maquinas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
-                Máquinas
-              </a>
-              <a href="/#seguridad" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
-                Seguridad
-              </a>
-              <a href="/#marcas" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
-                Marcas
-              </a>
-              <a href="/#horarios" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
-                Horarios
-              </a>
-              <a href="/#contacto" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))]">
-                Contacto
-              </a>
+              {mainLinks.map((link) => (
+                <button
+                  key={link.name}
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigateTo(link.hash);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))] text-[hsl(var(--text-main))] bg-transparent border-none cursor-pointer"
+                >
+                  {link.name}
+                </button>
+              ))}
+              {productLinks.map((link) => (
+                <button
+                  key={link.name}
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigateTo(link.hash);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg hover:bg-[hsl(var(--surface-2))] text-[hsl(var(--text-main))] bg-transparent border-none cursor-pointer"
+                >
+                  {link.name}
+                </button>
+              ))}
             </div>
           </motion.div>
         )}
