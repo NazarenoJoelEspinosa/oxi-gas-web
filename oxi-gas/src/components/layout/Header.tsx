@@ -81,7 +81,7 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
             src={oxiGasLogo}
             alt="OXI-GAS Ferretería Industrial"
             // Logo más grande: h-16 mobile, h-19 desktop
-            className="h-16 sm:h-24 w-auto object-contain transition-transform hover:scale-[1.02]"
+            className="h-16 sm:h-22 w-auto object-contain transition-transform hover:scale-[1.02]"
           />
         </Link>
 
