@@ -426,7 +426,6 @@ export const PRODUCTS: readonly Product[] = [
     name: 'Mix 20 – Gas de mezcla',
     brand: 'SIN MARCA',
     category: 'gases',
-    highlight: 'Gas mezcla',
     custom_fields: [
       { key: 'metros3', label: 'Metros cúbicos', placeholder: 'Ej: 10 m³' },
     ],
@@ -447,6 +446,9 @@ export const PRODUCTS: readonly Product[] = [
     name: 'Oxígeno en Metros Cúbicos',
     brand: 'SIN MARCA',
     category: 'gases',
+    custom_fields: [
+      { key: 'metros3', label: 'Metros cúbicos', placeholder: 'Ej: 5 m³' },
+    ],
   },
   {
     id: 'GAS0100015',
@@ -474,7 +476,6 @@ export const PRODUCTS: readonly Product[] = [
     name: 'Mix 310 – Gas de mezcla',
     brand: 'SIN MARCA',
     category: 'gases',
-    highlight: 'Gas mezcla',
     custom_fields: [
       { key: 'metros3', label: 'Metros cúbicos', placeholder: 'Ej: 10 m³' },
     ],
@@ -496,6 +497,9 @@ export const PRODUCTS: readonly Product[] = [
     brand: 'SIN MARCA',
     category: 'gases',
     highlight: 'Alta pureza',
+    custom_fields: [
+      { key: 'metros3', label: 'Metros cúbicos', placeholder: 'Ej: 5 m³' },
+    ],
   },
   {
     id: 'GAS0100012',
@@ -514,21 +518,21 @@ export const PRODUCTS: readonly Product[] = [
   {
     id: 'GAS01000011',
     code: 'GAS01000011',
-    name: 'Gas Butano × 15 KG – TOTAL',
+    name: 'Gas Butano × 15 KG',
     brand: 'SIN MARCA',
     category: 'gases',
   },
   {
     id: 'GAS010002',
     code: 'GAS010002',
-    name: 'Gas Propano 15 Clark – TOTAL',
+    name: 'Gas Propano 15 Clark Domiciliario – TOTAL',
     brand: 'SIN MARCA',
     category: 'gases',
   },
   {
     id: 'GAS0100003',
     code: 'GAS0100003',
-    name: 'Gas Propano 15 Clark – YPF',
+    name: 'Gas Propano 15 Clark Domiciliario – YPF',
     brand: 'SIN MARCA',
     category: 'gases',
   },
