@@ -1,40 +1,16 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, MessageCircle, ShieldCheck, Truck, Wrench } from 'lucide-react';
+import { MessageCircle, ShieldCheck, Truck, Wrench, MapPin } from 'lucide-react';
 import { WHATSAPP_URL } from '@/config/constants';
-
-type ScrollIndicatorProps = {
-  targetId: string;
-  label?: string;
-};
-
-function ScrollIndicator({ targetId, label = 'Ver más contenido' }: ScrollIndicatorProps) {
-  const prefersReducedMotion = useReducedMotion();
-
-  return (
-    <motion.a
-      href={`#${targetId}`}
-      aria-label={label}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.2, duration: 0.6 }}
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-2 text-white/70 hover:text-white transition-colors"
-    >
-      <span className="text-xs font-semibold uppercase tracking-[0.2em]">Scroll</span>
-      <motion.span
-        animate={prefersReducedMotion ? undefined : { y: [0, 8, 0] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/40"
-      >
-        <ChevronDown className="h-5 w-5" aria-hidden="true" />
-      </motion.span>
-    </motion.a>
-  );
-}
 
 const trustBadges = [
   { icon: ShieldCheck, label: 'Marcas líderes' },
   { icon: Truck, label: 'Stock permanente' },
   { icon: Wrench, label: 'Asesoramiento' },
+];
+
+const zonas = [
+  'Caseros', 'Ramos Mejía', 'Castelar', 'Morón',
+  'San Justo', 'Villa Lugano', 'y zonas cercanas',
 ];
 
 export function Hero() {
@@ -43,17 +19,10 @@ export function Hero() {
   return (
     <section
       id="inicio"
-      // ↓ Aumentado pt a pt-32 sm:pt-36 para que el header fijo no tape el contenido
       className="relative min-h-[78vh] sm:min-h-[88vh] flex items-center pt-32 sm:pt-36 pb-16 sm:pb-20 overflow-hidden bg-[hsl(var(--surface-0))]"
     >
-      <div
-        aria-hidden="true"
-        className="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute -bottom-32 right-[-10rem] h-[26rem] w-[26rem] rounded-full bg-primary/5 blur-3xl"
-      />
+      <div aria-hidden="true" className="absolute -top-40 -left-40 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-3xl" />
+      <div aria-hidden="true" className="absolute -bottom-32 right-[-10rem] h-[26rem] w-[26rem] rounded-full bg-primary/5 blur-3xl" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -84,9 +53,30 @@ export function Hero() {
               <span className="text-primary">Herramientas</span> Industriales
             </h1>
 
-            <p className="text-lg sm:text-xl md:text-2xl text-[hsl(var(--text-soft))] mb-8 sm:mb-10 font-medium max-w-2xl leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-[hsl(var(--text-soft))] mb-6 sm:mb-8 font-medium max-w-2xl leading-relaxed">
               Oxígeno · Acetileno · Argón · CO₂ | Equipos profesionales para soldadura y construcción
             </p>
+
+            {/* Zona de cobertura */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="flex items-start gap-3 mb-8 bg-primary/5 border border-primary/20 rounded-xl px-4 py-3"
+            >
+              <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-1">
+                  Zona de entrega
+                </p>
+                <p className="text-sm text-[hsl(var(--text-soft))] leading-relaxed">
+                  {zonas.join(' · ')}
+                </p>
+                <p className="text-xs text-[hsl(var(--text-soft))]/70 mt-1">
+                  ¿Estás más lejos? Consultanos igual, te ayudamos.
+                </p>
+              </div>
+            </motion.div>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <motion.a
@@ -95,7 +85,7 @@ export function Hero() {
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex justify-center items-center bg-primary hover:bg-primary/90 text-white font-bold text-lg py-4 px-8 rounded-xl shadow-lg shadow-primary/20 transition-all duration-300"
               >
-                Solicitar Cotización
+                Hacer una consulta
               </motion.a>
 
               <motion.a
@@ -107,7 +97,7 @@ export function Hero() {
                 className="inline-flex justify-center items-center gap-3 bg-[#25d366] hover:bg-[#25d366]/90 text-white font-bold text-lg py-4 px-8 rounded-xl shadow-lg shadow-[#25d366]/20 transition-all duration-300"
               >
                 <MessageCircle className="w-6 h-6" />
-                Hacer un pedido por WhatsApp
+                Escribir por WhatsApp
               </motion.a>
             </div>
 
@@ -121,6 +111,7 @@ export function Hero() {
             </ul>
           </motion.div>
 
+          {/* Columna derecha: foto del local */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
@@ -130,9 +121,15 @@ export function Hero() {
             <div className="relative">
               <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-primary/30 via-primary/5 to-transparent blur-2xl" aria-hidden="true" />
               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 rotate-1">
+                {/*
+                  FOTO DEL LOCAL: para usar tu imagen real tenés dos opciones:
+                  1) Subila a /public/images/ y usá: src="/images/local.jpg"
+                  2) Importala: import localPhoto from '@assets/local.jpg'; src={localPhoto}
+                  Por ahora queda el placeholder de Unsplash hasta que la subas.
+                */}
                 <img
                   src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=900&q=80"
-                  alt="Soldadura industrial profesional"
+                  alt="Local OXI-GAS Ferretería Industrial - Caseros"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--surface-0))]/80 via-transparent to-transparent" />
@@ -162,8 +159,6 @@ export function Hero() {
 
         </div>
       </div>
-
-      <ScrollIndicator targetId="productos" label="Ir a la sección de productos" />
     </section>
   );
 }
