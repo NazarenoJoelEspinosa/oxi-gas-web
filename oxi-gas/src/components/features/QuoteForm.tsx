@@ -16,8 +16,15 @@ type FormErrors = Partial<Record<keyof FormFields, string>>;
 function validateForm(fields: FormFields): FormErrors {
   const errors: FormErrors = {};
 
-  if (!fields.nombre.trim()) {
+  const nombreTrimmed = fields.nombre.trim();
+  if (!nombreTrimmed) {
     errors.nombre = 'El nombre es obligatorio.';
+  } else if (nombreTrimmed.length < 3) {
+    errors.nombre = 'Ingresá tu nombre completo (mínimo 3 caracteres).';
+  } else if (/^\d+$/.test(nombreTrimmed)) {
+    errors.nombre = 'El nombre no puede ser solo números.';
+  } else if (!/[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]{2,}/.test(nombreTrimmed)) {
+    errors.nombre = 'Ingresá un nombre válido.';
   }
 
   const telefonoLimpio = fields.telefono.replace(/\D/g, '');
@@ -27,8 +34,11 @@ function validateForm(fields: FormFields): FormErrors {
     errors.telefono = 'Ingresá un número válido (10 u 11 dígitos, sin el 0 ni el 15).';
   }
 
-  if (!fields.mensaje.trim()) {
-    errors.mensaje = 'Contanos qué necesitás cotizar.';
+  const mensajeTrimmed = fields.mensaje.trim();
+  if (!mensajeTrimmed) {
+    errors.mensaje = 'Contanos en qué te podemos ayudar.';
+  } else if (mensajeTrimmed.length < 10) {
+    errors.mensaje = 'Por favor escribí un poco más de detalle (mínimo 10 caracteres).';
   }
 
   return errors;
@@ -101,9 +111,13 @@ export function QuoteForm() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[hsl(var(--text-main))] mb-4">Solicitar Cotización</h2>
-          <p className="text-xl text-[hsl(var(--text-soft))]">
-            Completá el formulario y te respondemos a la brevedad en horario de atención.
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-primary mb-3">Contacto</p>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[hsl(var(--text-main))] mb-4">
+            ¿En qué te podemos ayudar?
+          </h2>
+          <p className="text-xl text-[hsl(var(--text-soft))] max-w-2xl mx-auto">
+            Dejanos tu consulta y te respondemos a la brevedad en horario de atención.
+            También podés escribirnos directo por WhatsApp.
           </p>
         </motion.div>
 
@@ -175,7 +189,7 @@ export function QuoteForm() {
 
                 <div className="space-y-2">
                   <label htmlFor="direccion" className="block text-sm font-medium text-[hsl(var(--text-soft))]">
-                    Dirección
+                    Dirección (Opcional)
                   </label>
                   <input
                     type="text"
@@ -191,7 +205,7 @@ export function QuoteForm() {
 
               <div className="space-y-2">
                 <label htmlFor="mensaje" className="block text-sm font-medium text-[hsl(var(--text-soft))]">
-                  Detalle de la consulta <span className="text-primary">*</span>
+                  ¿En qué te podemos ayudar? <span className="text-primary">*</span>
                 </label>
                 <textarea
                   id="mensaje"
@@ -200,7 +214,7 @@ export function QuoteForm() {
                   onBlur={blur('mensaje')}
                   rows={5}
                   className={`${fieldClass('mensaje')} resize-none`}
-                  placeholder="Contanos qué necesitás cotizar..."
+                  placeholder="Contanos tu consulta, qué producto buscás, si necesitás un presupuesto, etc."
                 />
                 {touched.mensaje && errors.mensaje && (
                   <p className="text-xs text-red-400 mt-1">{errors.mensaje}</p>
