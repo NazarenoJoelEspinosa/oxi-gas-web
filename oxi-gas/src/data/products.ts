@@ -528,7 +528,7 @@ export const PRODUCTS: readonly Product[] = [
   {
     id: 'GAS0100003',
     code: 'GAS0100003',
-    name: 'Gas Propano 15 – YPF',
+    name: 'Gas Propano 15 Clark – YPF',
     brand: 'SIN MARCA',
     category: 'gases',
   },
